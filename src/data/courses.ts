@@ -62,11 +62,18 @@ export const courses: Course[] = [
   pos('pos-uni-017', 'Psicopedagogia com Ênfase em Educação Especial', 'pos-psicopedagogia-educacao-especial', 'UNINASSAU', 'Educação', '12 meses'),
   pos('pos-uni-018', 'MBA em Gestão de Pessoas', 'mba-gestao-de-pessoas', 'UNINASSAU', 'Gestão', '12 meses'),
 
-  pos('pos-ufa-001', 'MBA em Gestão de Pessoas', 'unifael-mba-gestao-de-pessoas', 'UNIFAEL', 'Gestão', '12 meses'),
-  pos('pos-ufa-002', 'MBA em Gestão Pública', 'unifael-mba-gestao-publica', 'UNIFAEL', 'Gestão', '12 meses'),
-  pos('pos-ufa-003', 'MBA em Recursos Humanos', 'unifael-mba-recursos-humanos', 'UNIFAEL', 'Gestão', '6 meses'),
-  pos('pos-ufa-004', 'Gestão da Qualidade e Auditoria', 'unifael-gestao-da-qualidade-e-auditoria', 'UNIFAEL', 'Gestão', '6 meses'),
-  pos('pos-ufa-005', 'Docência do Ensino Superior', 'unifael-docencia-do-ensino-superior', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-001', 'Docência do Ensino Superior', 'unifael-docencia-do-ensino-superior', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-002', 'Psicopedagogia', 'unifael-psicopedagogia', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-003', 'Educação Especial e Inclusiva', 'unifael-educacao-especial-e-inclusiva', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-004', 'Gestão Escolar', 'unifael-gestao-escolar', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-005', 'Educação Infantil', 'unifael-educacao-infantil', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-006', 'Alfabetização e Letramento', 'unifael-alfabetizacao-e-letramento', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-007', 'Educação Inclusiva', 'unifael-educacao-inclusiva', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-008', 'Gestão e Coordenação Pedagógica', 'unifael-gestao-e-coordenacao-pedagogica', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-009', 'Libras', 'unifael-libras', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-010', 'Psicomotricidade', 'unifael-psicomotricidade', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-011', 'Neuroaprendizagem', 'unifael-neuroaprendizagem', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-012', 'Orientação Educacional', 'unifael-orientacao-educacional', 'UNIFAEL', 'Educação', '12 meses'),
 ];
 
 export const areas = ['Saúde', 'Negócios', 'Tecnologia', 'Educação', 'Direito', 'Gestão', 'Comunicação', 'Outras áreas'];
