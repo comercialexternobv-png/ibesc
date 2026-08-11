@@ -2,31 +2,8 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Search, SlidersHorizontal, ExternalLink } from 'lucide-react';
-import { categoryLabels, courses, getCourseInstitution, type Course } from '@/data/courses';
-
-const partnerLinks = {
-  UNINASSAU_GRADUACAO: 'https://graduacao.uninassau.digital/nossos-cursos',
-  UNINASSAU_POS: 'https://ead.uninassau.edu.br/pos-digital',
-  UNIFAEL_POS: 'https://posgrad.unifael.edu.br/digital?polo=boaviagemcentroii-ce&tipo=digital',
-};
-
-function catalogLinks(course: Course) {
-  const institutions = Array.isArray(course.institution) ? course.institution : [course.institution];
-  const links: { label: string; url: string }[] = [];
-
-  if (course.category === 'GRADUACAO' && institutions.includes('UNINASSAU')) {
-    links.push({ label: 'Catálogo UNINASSAU', url: partnerLinks.UNINASSAU_GRADUACAO });
-  }
-  if (course.category === 'POS_GRADUACAO' && institutions.includes('UNINASSAU')) {
-    links.push({ label: 'Mais informações — UNINASSAU', url: partnerLinks.UNINASSAU_POS });
-  }
-  if (course.category === 'POS_GRADUACAO' && institutions.includes('UNIFAEL')) {
-    links.push({ label: 'Mais informações — UNIFAEL', url: partnerLinks.UNIFAEL_POS });
-  }
-
-  return links;
-}
+import { Search, SlidersHorizontal } from 'lucide-react';
+import { categoryLabels, courses, getCourseInstitution } from '@/data/courses';
 
 export default function CourseCatalog() {
   const [query, setQuery] = useState('');
@@ -37,12 +14,10 @@ export default function CourseCatalog() {
   const filtered = useMemo(() => courses.filter((course) => {
     if (course.status !== 'ATIVO') return false;
     const text = `${course.name} ${course.description} ${course.area} ${getCourseInstitution(course)}`.toLowerCase();
-    const matchesQuery = text.includes(query.trim().toLowerCase());
-    const matchesArea = area === 'Todas' || course.area === area;
-    const matchesCategory = category === 'Todas' || course.category === category;
-    const institutions = Array.isArray(course.institution) ? course.institution : [course.institution];
-    const matchesInstitution = institution === 'Todas' || institutions.includes(institution as 'IBESC' | 'UNINASSAU' | 'UNIFAEL');
-    return matchesQuery && matchesArea && matchesCategory && matchesInstitution;
+    return text.includes(query.trim().toLowerCase())
+      && (area === 'Todas' || course.area === area)
+      && (category === 'Todas' || course.category === category)
+      && (institution === 'Todas' || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(institution as 'IBESC' | 'UNINASSAU' | 'UNIFAEL'));
   }), [query, area, category, institution]);
 
   function clearFilters() {
@@ -64,26 +39,19 @@ export default function CourseCatalog() {
       <span style={{color:'var(--muted)',fontSize:14}}><SlidersHorizontal size={15} style={{verticalAlign:'middle',marginRight:5}}/>Filtros aplicados em tempo real</span>
     </div>
 
-    {filtered.length ? <div className="course-grid">{filtered.map(course => {
-      const links = catalogLinks(course);
-      const isPartnerPost = course.category === 'POS_GRADUACAO' && course.externalUrl;
-      return <article className="card course-card" key={course.id}>
+    {filtered.length ? <div className="course-grid">{filtered.map(course => (
+      <article className="card course-card" key={course.id}>
         <div className="course-image"/>
-        <span className="tag">{course.type}</span>
+        <span className="tag">{course.category === 'POS_GRADUACAO' ? 'Pós-graduação Digital' : course.type}</span>
         <h3>{course.name}</h3>
         <div className="course-meta">{getCourseInstitution(course)} • {course.area}</div>
         <p>{course.description}</p>
         {course.duration && <p style={{fontSize:13,marginTop:-6}}><strong>Duração:</strong> {course.duration}</p>}
-        {isPartnerPost && <p style={{fontSize:13,marginTop:-6}}>Consulte a instituição para detalhes, condições e matrícula.</p>}
-        <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-          {isPartnerPost ? (
-            <a className="btn btn-dark" href={course.externalUrl} target="_blank" rel="noopener noreferrer"><ExternalLink size={16}/> Mais informações</a>
-          ) : (
-            <Link className="btn btn-dark" href={`/curso/${course.slug}`}>{course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}</Link>
-          )}
-          {links.filter(link => link.url !== course.externalUrl).map(link => <a key={link.url} className="btn" style={{border:'1px solid var(--border)'}} href={link.url} target="_blank" rel="noopener noreferrer"><ExternalLink size={15}/> {link.label}</a>)}
-        </div>
-      </article>;
-    })}</div> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
+        {course.category === 'POS_GRADUACAO' && <p style={{fontSize:13,marginTop:-6}}>Consulte a instituição para detalhes atualizados.</p>}
+        <Link className="btn btn-dark" href={`/curso/${course.slug}`}>
+          {course.category === 'POS_GRADUACAO' ? 'Ver detalhes da pós' : course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}
+        </Link>
+      </article>
+    ))}</div> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
   </>;
 }
