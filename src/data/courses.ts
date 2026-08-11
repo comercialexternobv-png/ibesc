@@ -6,6 +6,7 @@ export interface Course {
   institution: Institution | Institution[]; area: string; modality?: string; duration?: string;
   description: string; image?: string; status: 'ATIVO' | 'INATIVO' | 'EM_BREVE'; featured?: boolean;
   local?: string; startDate?: string; whatsapp?: string; externalUrl?: string; attendanceInfo?: string;
+  audience?: string; learning?: string[]; highlights?: string[]; requirements?: string;
 }
 
 export const partnerCatalogs = {
@@ -19,11 +20,18 @@ const grad = (id: string, name: string, slug: string, type: string, area: string
   status: 'ATIVO', externalUrl: partnerCatalogs.uninassauGraduacao.url, attendanceInfo,
 });
 
-const pos = (id: string, name: string, slug: string, institution: 'UNINASSAU' | 'UNIFAEL', area: string, duration = '6 a 12 meses'): Course => ({
+const pos = (
+  id: string, name: string, slug: string, institution: 'UNINASSAU' | 'UNIFAEL', area: string,
+  duration = '6 a 12 meses', extra: Partial<Course> = {}
+): Course => ({
   id, name, slug, category: 'POS_GRADUACAO', type: 'Especialização', institution, area,
-  description: `Pós-graduação ${institution} na modalidade digital. Consulte a instituição para confirmar duração, condições e disponibilidade atual.`,
+  description: extra.description || `Especialização em ${name}, com formação digital voltada ao desenvolvimento profissional na área de ${area.toLowerCase()}.`,
   duration, modality: 'Digital', status: 'ATIVO',
   externalUrl: institution === 'UNINASSAU' ? partnerCatalogs.uninassauPos.url : partnerCatalogs.unifaelPos.url,
+  audience: extra.audience || `Profissionais que desejam ampliar conhecimentos e fortalecer sua atuação em ${area.toLowerCase()}.`,
+  learning: extra.learning || [`Fundamentos e conceitos de ${name}.`, `Aplicações práticas relacionadas à área de ${area.toLowerCase()}.`, 'Desenvolvimento profissional e atualização de conhecimentos.'],
+  highlights: extra.highlights || ['Modalidade digital', 'Flexibilidade para estudar de onde estiver', institution === 'UNINASSAU' ? 'Aulas gravadas e encontros síncronos mensais' : 'Formação digital com acompanhamento acadêmico'],
+  requirements: extra.requirements || 'É necessário possuir diploma de graduação para ingressar em uma pós-graduação.',
 });
 
 export const courses: Course[] = [
@@ -46,8 +54,8 @@ export const courses: Course[] = [
   pos('pos-uni-001', 'Auditoria e Controladoria', 'pos-auditoria-e-controladoria', 'UNINASSAU', 'Negócios'),
   pos('pos-uni-002', 'Administração Pública e Direito Público', 'pos-administracao-publica-e-direito-publico', 'UNINASSAU', 'Negócios'),
   pos('pos-uni-003', 'Gestão da Qualidade e Auditoria', 'pos-gestao-da-qualidade-e-auditoria', 'UNINASSAU', 'Negócios'),
-  pos('pos-uni-004', 'Educação Especial e Inclusiva', 'pos-educacao-especial-e-inclusiva', 'UNINASSAU', 'Educação'),
-  pos('pos-uni-005', 'Educação Infantil e Alfabetização', 'pos-educacao-infantil-e-alfabetizacao', 'UNINASSAU', 'Educação'),
+  pos('pos-uni-004', 'Educação Especial e Inclusiva', 'pos-educacao-especial-e-inclusiva', 'UNINASSAU', 'Educação', '6 meses', { description: 'Especialização voltada à atuação com pessoas com deficiência, transtornos do desenvolvimento e altas habilidades, com foco em práticas pedagógicas inclusivas, legislação e acessibilidade.', audience: 'Profissionais da educação e interessados em ampliar a atuação em educação inclusiva.', learning: ['Metodologia de Ensino a Distância', 'Didática do Ensino Superior', 'Inclusão Social na Área Educacional', 'Desenvolvimento da Aprendizagem na Educação Especial', 'Gestão de Carreira'], highlights: ['100% digital', 'Conclusão em 6 meses', 'Aulas gravadas e encontros síncronos mensais'] }),
+  pos('pos-uni-005', 'Educação Infantil e Alfabetização', 'pos-educacao-infantil-e-alfabetizacao', 'UNINASSAU', 'Educação', '6 meses'),
   pos('pos-uni-006', 'Docência da Educação Superior', 'pos-docencia-da-educacao-superior', 'UNINASSAU', 'Educação'),
   pos('pos-uni-007', 'Gerenciamento de TI', 'pos-gerenciamento-de-ti', 'UNINASSAU', 'Tecnologia'),
   pos('pos-uni-008', 'Análise e Projeto de Sistemas de Software', 'pos-analise-e-projeto-de-sistemas-de-software', 'UNINASSAU', 'Tecnologia'),
@@ -58,11 +66,11 @@ export const courses: Course[] = [
   pos('pos-uni-013', 'Análises Clínicas', 'pos-analises-clinicas', 'UNINASSAU', 'Saúde'),
   pos('pos-uni-014', 'Enfermagem Oncológica', 'pos-enfermagem-oncologica', 'UNINASSAU', 'Saúde'),
   pos('pos-uni-015', 'Epidemiologia e Vigilância em Saúde', 'pos-epidemiologia-e-vigilancia-em-saude', 'UNINASSAU', 'Saúde'),
-  pos('pos-uni-016', 'Gestão Escolar', 'pos-gestao-escolar', 'UNINASSAU', 'Educação', '12 meses'),
+  pos('pos-uni-016', 'Gestão Escolar', 'pos-gestao-escolar', 'UNINASSAU', 'Educação', '12 meses', { description: 'Especialização voltada à formação e atualização de profissionais que atuam ou desejam atuar na gestão escolar e educacional.', learning: ['Metodologia de Ensino a Distância', 'Psicologia do Comportamento Escolar', 'Diversidade e Inclusão Educacional', 'Fundamentos da Gestão Escolar', 'Mídia, Tecnologia e Aprendizagem'] }),
   pos('pos-uni-017', 'Psicopedagogia com Ênfase em Educação Especial', 'pos-psicopedagogia-educacao-especial', 'UNINASSAU', 'Educação', '12 meses'),
   pos('pos-uni-018', 'MBA em Gestão de Pessoas', 'mba-gestao-de-pessoas', 'UNINASSAU', 'Gestão', '12 meses'),
 
-  pos('pos-ufa-001', 'Docência do Ensino Superior', 'unifael-docencia-do-ensino-superior', 'UNIFAEL', 'Educação', '12 meses'),
+  pos('pos-ufa-001', 'Docência do Ensino Superior', 'unifael-docencia-do-ensino-superior', 'UNIFAEL', 'Educação', '12 meses', { description: 'Especialização que capacita profissionais para lecionar no ensino superior, com abordagem crítico-reflexiva sobre as dimensões técnica, político-social e humana da docência.', audience: 'Profissionais que desejam atuar ou se aperfeiçoar na docência em cursos superiores.', learning: ['Metodologia do Ensino a Distância', 'Gestão de Carreira', 'Fundamentos da Educação', 'Psicologia da Aprendizagem e da Avaliação', 'Qualidade na Educação', 'Direito Educacional', 'Planejamento Educacional no Ensino Superior', 'Tecnologias Educacionais', 'Métodos e Técnicas de Ensino', 'Didática do Ensino Superior', 'Avaliação Educacional'], highlights: ['Digital', '12 meses', 'Pós-graduação EaD', 'Formação direcionada à docência no ensino superior'] }),
   pos('pos-ufa-002', 'Psicopedagogia', 'unifael-psicopedagogia', 'UNIFAEL', 'Educação', '12 meses'),
   pos('pos-ufa-003', 'Educação Especial e Inclusiva', 'unifael-educacao-especial-e-inclusiva', 'UNIFAEL', 'Educação', '12 meses'),
   pos('pos-ufa-004', 'Gestão Escolar', 'unifael-gestao-escolar', 'UNIFAEL', 'Educação', '12 meses'),
