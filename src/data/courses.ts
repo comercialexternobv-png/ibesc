@@ -13,7 +13,7 @@ export interface Course {
   duration?: string;
   description: string;
   image?: string;
-  status: string;
+  status: 'ATIVO' | 'INATIVO' | 'EM_BREVE';
   featured?: boolean;
   local?: string;
   startDate?: string;
@@ -39,43 +39,60 @@ export const partnerCatalogs = {
   },
 };
 
+// Catálogo inicial validado. Novos cursos podem ser adicionados sem alterar as páginas.
 export const courses: Course[] = [
   {
-    id: '1', name: 'Enfermagem', slug: 'enfermagem', category: 'GRADUACAO', type: 'Bacharelado',
+    id: 'grad-001', name: 'Enfermagem', slug: 'enfermagem', category: 'GRADUACAO', type: 'Bacharelado',
     institution: 'UNINASSAU', area: 'Saúde',
     description: 'Formação superior para quem deseja construir uma trajetória profissional na área da saúde.',
-    status: 'Ativo', featured: true, externalUrl: partnerCatalogs.uninassauGraduacao.url,
+    status: 'ATIVO', featured: true, externalUrl: partnerCatalogs.uninassauGraduacao.url,
   },
   {
-    id: '2', name: 'Administração', slug: 'administracao', category: 'GRADUACAO', type: 'Bacharelado',
+    id: 'grad-002', name: 'Administração', slug: 'administracao', category: 'GRADUACAO', type: 'Bacharelado',
     institution: 'UNINASSAU', area: 'Negócios',
     description: 'Formação para desenvolver competências de gestão, negócios e liderança.',
-    status: 'Ativo', featured: true, externalUrl: partnerCatalogs.uninassauGraduacao.url,
+    status: 'ATIVO', featured: true, externalUrl: partnerCatalogs.uninassauGraduacao.url,
   },
   {
-    id: '3', name: 'Pedagogia', slug: 'pedagogia', category: 'GRADUACAO', type: 'Licenciatura',
+    id: 'grad-003', name: 'Pedagogia', slug: 'pedagogia', category: 'GRADUACAO', type: 'Licenciatura',
     institution: 'UNINASSAU', area: 'Educação',
     description: 'Formação superior para atuação em diferentes contextos educacionais.',
-    status: 'Ativo', featured: true, externalUrl: partnerCatalogs.uninassauGraduacao.url,
+    status: 'ATIVO', featured: true, externalUrl: partnerCatalogs.uninassauGraduacao.url,
   },
   {
-    id: '4', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico',
+    id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico',
     institution: 'IBESC', area: 'Saúde',
     description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática.',
-    status: 'Ativo', featured: true,
+    status: 'ATIVO', featured: true,
   },
   {
-    id: '5', name: 'Técnico em Informática', slug: 'tecnico-em-informatica', category: 'TECNICO', type: 'Curso Técnico',
+    id: 'tec-002', name: 'Técnico em Informática', slug: 'tecnico-em-informatica', category: 'TECNICO', type: 'Curso Técnico',
     institution: 'IBESC', area: 'Tecnologia',
     description: 'Desenvolva conhecimentos técnicos para atuar com tecnologia, suporte e informática.',
-    status: 'Ativo', featured: true,
+    status: 'ATIVO', featured: true,
   },
   {
-    id: '6', name: 'Pós-graduação', slug: 'pos-graduacao', category: 'POS_GRADUACAO', type: 'Especialização',
+    id: 'pos-001', name: 'Pós-graduação', slug: 'pos-graduacao', category: 'POS_GRADUACAO', type: 'Especialização',
     institution: ['UNINASSAU', 'UNIFAEL'], area: 'Diversas áreas',
     description: 'Encontre opções de especialização oferecidas pelas instituições parceiras do IBESC.',
-    status: 'Ativo', featured: true,
+    status: 'ATIVO', featured: true,
+    externalUrl: partnerCatalogs.uninassauPos.url,
   },
 ];
 
 export const areas = ['Saúde', 'Negócios', 'Tecnologia', 'Educação', 'Direito', 'Gestão', 'Comunicação', 'Outras áreas'];
+
+export const categoryLabels: Record<CourseCategory, string> = {
+  GRADUACAO: 'Graduação',
+  POS_GRADUACAO: 'Pós-graduação',
+  TECNICO: 'Cursos técnicos',
+  PROFISSIONALIZANTE: 'Cursos profissionalizantes',
+};
+
+export function getCourseInstitution(course: Course): string {
+  return Array.isArray(course.institution) ? course.institution.join(' / ') : course.institution;
+}
+
+export function getCoursesByCategory(category: CourseCategory): Course[] {
+  return courses.filter((course) => course.category === category && course.status === 'ATIVO');
+}
