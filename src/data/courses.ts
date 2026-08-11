@@ -19,6 +19,13 @@ const grad = (id: string, name: string, slug: string, type: string, area: string
   status: 'ATIVO', externalUrl: partnerCatalogs.uninassauGraduacao.url, attendanceInfo,
 });
 
+const pos = (id: string, name: string, slug: string, institution: 'UNINASSAU' | 'UNIFAEL', area: string, duration = '6 a 12 meses'): Course => ({
+  id, name, slug, category: 'POS_GRADUACAO', type: 'Especialização', institution, area,
+  description: `Pós-graduação ${institution} na modalidade digital. Consulte a instituição para confirmar duração, condições e disponibilidade atual.`,
+  duration, modality: 'Digital', status: 'ATIVO',
+  externalUrl: institution === 'UNINASSAU' ? partnerCatalogs.uninassauPos.url : partnerCatalogs.unifaelPos.url,
+});
+
 export const courses: Course[] = [
   grad('grad-001', 'Enfermagem', 'enfermagem', 'Bacharelado', 'Saúde', 'Formação superior para quem deseja construir uma trajetória profissional na área da saúde.'),
   grad('grad-002', 'Administração', 'administracao', 'Bacharelado', 'Negócios', 'Formação para desenvolver competências de gestão, negócios e liderança.'),
@@ -35,7 +42,31 @@ export const courses: Course[] = [
 
   { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática.', status: 'ATIVO', featured: true },
   { id: 'tec-002', name: 'Técnico em Informática', slug: 'tecnico-em-informatica', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Tecnologia', description: 'Desenvolva conhecimentos técnicos para atuar com tecnologia, suporte e informática.', status: 'ATIVO', featured: true },
-  { id: 'pos-001', name: 'Pós-graduação', slug: 'pos-graduacao', category: 'POS_GRADUACAO', type: 'Especialização', institution: ['UNINASSAU', 'UNIFAEL'], area: 'Diversas áreas', description: 'Encontre opções de especialização oferecidas pelas instituições parceiras do IBESC.', status: 'ATIVO', featured: true, externalUrl: partnerCatalogs.uninassauPos.url },
+
+  pos('pos-uni-001', 'Auditoria e Controladoria', 'pos-auditoria-e-controladoria', 'UNINASSAU', 'Negócios'),
+  pos('pos-uni-002', 'Administração Pública e Direito Público', 'pos-administracao-publica-e-direito-publico', 'UNINASSAU', 'Negócios'),
+  pos('pos-uni-003', 'Gestão da Qualidade e Auditoria', 'pos-gestao-da-qualidade-e-auditoria', 'UNINASSAU', 'Negócios'),
+  pos('pos-uni-004', 'Educação Especial e Inclusiva', 'pos-educacao-especial-e-inclusiva', 'UNINASSAU', 'Educação'),
+  pos('pos-uni-005', 'Educação Infantil e Alfabetização', 'pos-educacao-infantil-e-alfabetizacao', 'UNINASSAU', 'Educação'),
+  pos('pos-uni-006', 'Docência da Educação Superior', 'pos-docencia-da-educacao-superior', 'UNINASSAU', 'Educação'),
+  pos('pos-uni-007', 'Gerenciamento de TI', 'pos-gerenciamento-de-ti', 'UNINASSAU', 'Tecnologia'),
+  pos('pos-uni-008', 'Análise e Projeto de Sistemas de Software', 'pos-analise-e-projeto-de-sistemas-de-software', 'UNINASSAU', 'Tecnologia'),
+  pos('pos-uni-009', 'Ciências de Dados', 'pos-ciencias-de-dados', 'UNINASSAU', 'Tecnologia'),
+  pos('pos-uni-010', 'Direito Civil e Processo Civil', 'pos-direito-civil-e-processo-civil', 'UNINASSAU', 'Direito'),
+  pos('pos-uni-011', 'Direito do Trabalho', 'pos-direito-do-trabalho', 'UNINASSAU', 'Direito'),
+  pos('pos-uni-012', 'Estética e Cosmetologia', 'pos-estetica-e-cosmetologia', 'UNINASSAU', 'Saúde'),
+  pos('pos-uni-013', 'Análises Clínicas', 'pos-analises-clinicas', 'UNINASSAU', 'Saúde'),
+  pos('pos-uni-014', 'Enfermagem Oncológica', 'pos-enfermagem-oncologica', 'UNINASSAU', 'Saúde'),
+  pos('pos-uni-015', 'Epidemiologia e Vigilância em Saúde', 'pos-epidemiologia-e-vigilancia-em-saude', 'UNINASSAU', 'Saúde'),
+  pos('pos-uni-016', 'Gestão Escolar', 'pos-gestao-escolar', 'UNINASSAU', 'Educação', '12 meses'),
+  pos('pos-uni-017', 'Psicopedagogia com Ênfase em Educação Especial', 'pos-psicopedagogia-educacao-especial', 'UNINASSAU', 'Educação', '12 meses'),
+  pos('pos-uni-018', 'MBA em Gestão de Pessoas', 'mba-gestao-de-pessoas', 'UNINASSAU', 'Gestão', '12 meses'),
+
+  pos('pos-ufa-001', 'MBA em Gestão de Pessoas', 'unifael-mba-gestao-de-pessoas', 'UNIFAEL', 'Gestão', '12 meses'),
+  pos('pos-ufa-002', 'MBA em Gestão Pública', 'unifael-mba-gestao-publica', 'UNIFAEL', 'Gestão', '12 meses'),
+  pos('pos-ufa-003', 'MBA em Recursos Humanos', 'unifael-mba-recursos-humanos', 'UNIFAEL', 'Gestão', '6 meses'),
+  pos('pos-ufa-004', 'Gestão da Qualidade e Auditoria', 'unifael-gestao-da-qualidade-e-auditoria', 'UNIFAEL', 'Gestão', '6 meses'),
+  pos('pos-ufa-005', 'Docência do Ensino Superior', 'unifael-docencia-do-ensino-superior', 'UNIFAEL', 'Educação', '12 meses'),
 ];
 
 export const areas = ['Saúde', 'Negócios', 'Tecnologia', 'Educação', 'Direito', 'Gestão', 'Comunicação', 'Outras áreas'];
