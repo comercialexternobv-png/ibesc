@@ -40,27 +40,17 @@ export default async function CoursePage({
       <section className="hero">
         <div className="container hero-grid">
           <div>
-            <span
-              className="eyebrow"
-              style={{ background: 'rgba(255,255,255,.12)', color: '#fff' }}
-            >
+            <span className="eyebrow" style={{ background: 'rgba(255,255,255,.12)', color: '#fff' }}>
               {c.type}
             </span>
             <h1 style={{ maxWidth: 850 }}>{c.name}</h1>
-            <p>
-              {institution} • {c.area}
-            </p>
+            <p>{institution} • {c.area}</p>
             <div className="hero-actions">
               <a className="btn btn-primary" href={`https://wa.me/${wa}?text=${msg}`}>
                 {own ? 'Quero me matricular' : 'Falar com um consultor'} <ArrowRight size={17} />
               </a>
               {!own && (
-                <a
-                  className="btn btn-outline"
-                  href={catalogUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="btn btn-outline" href={catalogUrl} target="_blank" rel="noreferrer">
                   Ver catálogo oficial
                 </a>
               )}
@@ -68,9 +58,7 @@ export default async function CoursePage({
           </div>
           <div className="hero-card">
             <div className="fake-photo" />
-            <strong>
-              {own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}
-            </strong>
+            <strong>{own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong>
           </div>
         </div>
       </section>
@@ -81,34 +69,19 @@ export default async function CoursePage({
             <span className="eyebrow">Sobre a formação</span>
             <h2>{own ? 'Por que escolher este curso?' : 'Conheça esta oportunidade de formação'}</h2>
             <p>{c.description}</p>
-
             <div className="card" style={{ marginTop: 25 }}>
               <h3>Informações principais</h3>
-              <p>
-                <strong>Modalidade:</strong> {c.modality || 'Informação a confirmar pelo consultor'}
-              </p>
-              <p>
-                <strong>Duração:</strong> {c.duration || 'Informação a confirmar pelo consultor'}
-              </p>
-              <p>
-                <strong>Local:</strong> {c.local || 'Boa Viagem — CE'}
-              </p>
-              <p>
-                <strong>Instituição:</strong> {institution}
-              </p>
-              <p>
-                <strong>Próxima turma:</strong> {c.startDate || 'Informação a confirmar pelo consultor'}
-              </p>
+              <p><strong>Modalidade:</strong> {c.modality || 'Informação a confirmar pelo consultor'}</p>
+              <p><strong>Duração:</strong> {c.duration || 'Informação a confirmar pelo consultor'}</p>
+              <p><strong>Local:</strong> {c.local || 'Boa Viagem — CE'}</p>
+              <p><strong>Instituição:</strong> {institution}</p>
+              <p><strong>Próxima turma:</strong> {c.startDate || 'Informação a confirmar pelo consultor'}</p>
             </div>
           </div>
 
           <div className="card">
             <h3>Quero receber informações</h3>
-            <LeadForm
-              courseName={c.name}
-              tipoFormacao={c.type}
-              instituicao={institution}
-            />
+            <LeadForm courseName={c.name} tipoFormacao={c.category} instituicao={institution} />
           </div>
         </div>
       </section>
@@ -118,13 +91,8 @@ export default async function CoursePage({
           <div className="section-head">
             <span className="eyebrow">Conheça melhor</span>
             <h2>{own ? 'Por que escolher o IBESC?' : 'Por que considerar esta formação?'}</h2>
-            <p>
-              {own
-                ? 'Nossa equipe orienta você durante a escolha e os próximos passos da formação.'
-                : 'Consulte nossa equipe para confirmar modalidade, duração, disponibilidade e condições atuais.'}
-            </p>
+            <p>{own ? 'Nossa equipe orienta você durante a escolha e os próximos passos da formação.' : 'Consulte nossa equipe para confirmar modalidade, duração, disponibilidade e condições atuais.'}</p>
           </div>
-
           <div className="diff-grid">
             {(own
               ? ['Formação direcionada', 'Atendimento próximo', 'Orientação para matrícula', 'Foco no seu próximo passo']
@@ -133,11 +101,7 @@ export default async function CoursePage({
               <div className="card diff-card" key={x}>
                 <CheckCircle2 color="var(--green)" />
                 <h3>{x}</h3>
-                <p>
-                  {own
-                    ? 'Informação comercial apresentada sem inventar dados acadêmicos não cadastrados.'
-                    : 'O consultor IBESC ajuda você a encontrar e encaminhar a opção adequada.'}
-                </p>
+                <p>{own ? 'Informação comercial apresentada sem inventar dados acadêmicos não cadastrados.' : 'O consultor IBESC ajuda você a encontrar e encaminhar a opção adequada.'}</p>
               </div>
             ))}
           </div>
@@ -150,17 +114,9 @@ export default async function CoursePage({
             <h2>{own ? 'Quer saber mais sobre este curso?' : 'Quer verificar as opções disponíveis?'}</h2>
             <p>Fale com o IBESC e receba orientação sobre disponibilidade e matrícula.</p>
             <div className="hero-actions">
-              <a className="btn btn-dark" href={`https://wa.me/${wa}?text=${msg}`}>
-                Falar no WhatsApp
-              </a>
+              <a className="btn btn-dark" href={`https://wa.me/${wa}?text=${msg}`}>Falar no WhatsApp</a>
               {!own && (
-                <a
-                  className="btn btn-outline"
-                  style={{ background: 'var(--navy)' }}
-                  href={catalogUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="btn btn-outline" style={{ background: 'var(--navy)' }} href={catalogUrl} target="_blank" rel="noreferrer">
                   Acessar catálogo oficial
                 </a>
               )}
@@ -171,9 +127,7 @@ export default async function CoursePage({
 
       <section className="section">
         <div className="container">
-          <Link className="link" href={c.category === 'TECNICO' ? '/cursos-tecnicos' : '/cursos'}>
-            ← Voltar para cursos
-          </Link>
+          <Link className="link" href={c.category === 'TECNICO' ? '/cursos-tecnicos' : '/cursos'}>← Voltar para cursos</Link>
         </div>
       </section>
     </main>
