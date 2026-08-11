@@ -1,5 +1,14 @@
-import Link from 'next/link';
-import { courses } from '@/data/courses';
+import { Metadata } from 'next';
+import CourseCatalog from './CourseCatalog';
 
-export const metadata={title:'Cursos | IBESC',description:'Encontre cursos de graduação, pós-graduação e técnicos no IBESC.'};
-export default function Cursos(){return <main><div className="section"><div className="container"><div className="section-head"><span className="eyebrow">Catálogo IBESC</span><h1 style={{fontFamily:'Poppins',fontSize:'clamp(36px,5vw,56px)'}}>Encontre seu curso</h1><p>Explore nossas opções de formação e encontre o caminho que combina com seus objetivos.</p></div><div className="search-box"><div className="search-grid"><input className="input" placeholder="Digite o nome do curso"/><select className="input"><option>Todas as áreas</option></select><select className="input"><option>Todas as formações</option></select><select className="input"><option>Todas as instituições</option></select></div></div><div className="course-grid" style={{marginTop:35}}>{courses.map(c=><article className="card course-card" key={c.id}><div className="course-image"/><span className="tag">{c.type}</span><h3>{c.name}</h3><div className="course-meta">{Array.isArray(c.institution)?c.institution.join(' / '):c.institution} • {c.area}</div><p>{c.description}</p><Link className="btn btn-dark" href={`/curso/${c.slug}`}>Saiba mais</Link></article>)}</div></div></div></main>}
+export const metadata: Metadata = {
+  title: 'Cursos | IBESC',
+  description: 'Encontre graduação, pós-graduação e cursos técnicos em Boa Viagem — CE.',
+};
+
+export default function Cursos() {
+  return <main>
+    <section className="hero"><div className="container"><span className="eyebrow" style={{background:'rgba(255,255,255,.12)',color:'#fff'}}>Central de formação</span><h1>Encontre sua formação.</h1><p>Explore as opções do IBESC e encontre o caminho que combina com seus objetivos profissionais.</p></div></section>
+    <section className="section"><div className="container"><div className="section-head"><span className="eyebrow">Catálogo IBESC</span><h2>Encontre o curso ideal para você</h2><p>Pesquise por nome, área, formação ou instituição. Nos cursos parceiros, você também pode acessar o catálogo oficial da instituição.</p></div><CourseCatalog /></div></section>
+  </main>;
+}
