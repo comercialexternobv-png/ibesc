@@ -11,17 +11,24 @@ type LeadFormProps = {
   instituicao: string;
 };
 
-export default function LeadForm({
-  courseName,
-  tipoFormacao,
-  instituicao,
-}: LeadFormProps) {
+export default function LeadForm({ courseName, tipoFormacao, instituicao }: LeadFormProps) {
   const [nome, setNome] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+
+  const tipoLabel =
+    tipoFormacao === 'GRADUACAO'
+      ? 'graduação'
+      : tipoFormacao === 'POS_GRADUACAO'
+        ? 'pós-graduação'
+        : tipoFormacao === 'TECNICO'
+          ? 'curso técnico'
+          : 'curso';
+
+  const mensagemWhatsapp = `Olá! Vim pelo site do IBESC e acabei de solicitar informações sobre o curso de ${courseName} (${tipoLabel}${instituicao ? ` — ${instituicao}` : ''}). Meu nome é ${nome}. Gostaria de receber informações sobre matrícula e próximos passos.`;
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,11 +60,11 @@ export default function LeadForm({
 
       setSuccess(true);
 
-      const msg = encodeURIComponent(
-        `Olá! Vim pelo site do IBESC e acabei de solicitar informações sobre o curso de ${courseName}. Meu nome é ${nome}.`
+      window.open(
+        `https://wa.me/${wa}?text=${encodeURIComponent(mensagemWhatsapp)}`,
+        '_blank',
+        'noopener,noreferrer'
       );
-
-      window.open(`https://wa.me/${wa}?text=${msg}`, '_blank', 'noopener,noreferrer');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Não foi possível enviar seus dados.');
     } finally {
@@ -122,19 +129,8 @@ export default function LeadForm({
         </p>
       )}
 
-      <button
-        type="submit"
-        className="btn btn-primary"
-        style={{ width: '100%' }}
-        disabled={loading}
-      >
-        {loading ? (
-          'Enviando...'
-        ) : (
-          <>
-            <Send size={18} /> Quero receber informações
-          </>
-        )}
+      <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
+        {loading ? 'Enviando...' : <><Send size={18} /> Quero receber informações</>}
       </button>
 
       <a
