@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo, useState } from 'react';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { Search, SlidersHorizontal, ExternalLink } from 'lucide-react';
 import { categoryLabels, courses, getCourseInstitution, type Course } from '@/data/courses';
 
 const partnerLinks = {
@@ -19,10 +19,10 @@ function catalogLinks(course: Course) {
     links.push({ label: 'Catálogo UNINASSAU', url: partnerLinks.UNINASSAU_GRADUACAO });
   }
   if (course.category === 'POS_GRADUACAO' && institutions.includes('UNINASSAU')) {
-    links.push({ label: 'Pós UNINASSAU', url: partnerLinks.UNINASSAU_POS });
+    links.push({ label: 'Mais informações — UNINASSAU', url: partnerLinks.UNINASSAU_POS });
   }
   if (course.category === 'POS_GRADUACAO' && institutions.includes('UNIFAEL')) {
-    links.push({ label: 'Pós UNIFAEL', url: partnerLinks.UNIFAEL_POS });
+    links.push({ label: 'Mais informações — UNIFAEL', url: partnerLinks.UNIFAEL_POS });
   }
 
   return links;
@@ -46,10 +46,7 @@ export default function CourseCatalog() {
   }), [query, area, category, institution]);
 
   function clearFilters() {
-    setQuery('');
-    setArea('Todas');
-    setCategory('Todas');
-    setInstitution('Todas');
+    setQuery(''); setArea('Todas'); setCategory('Todas'); setInstitution('Todas');
   }
 
   return <>
@@ -69,15 +66,22 @@ export default function CourseCatalog() {
 
     {filtered.length ? <div className="course-grid">{filtered.map(course => {
       const links = catalogLinks(course);
+      const isPartnerPost = course.category === 'POS_GRADUACAO' && course.externalUrl;
       return <article className="card course-card" key={course.id}>
         <div className="course-image"/>
         <span className="tag">{course.type}</span>
         <h3>{course.name}</h3>
         <div className="course-meta">{getCourseInstitution(course)} • {course.area}</div>
         <p>{course.description}</p>
+        {course.duration && <p style={{fontSize:13,marginTop:-6}}><strong>Duração:</strong> {course.duration}</p>}
+        {isPartnerPost && <p style={{fontSize:13,marginTop:-6}}>Consulte a instituição para detalhes, condições e matrícula.</p>}
         <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-          <Link className="btn btn-dark" href={`/curso/${course.slug}`}>{course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}</Link>
-          {links.map(link => <a key={link.url} className="btn" style={{border:'1px solid var(--border)'}} href={link.url} target="_blank" rel="noopener noreferrer">{link.label}</a>)}
+          {isPartnerPost ? (
+            <a className="btn btn-dark" href={course.externalUrl} target="_blank" rel="noopener noreferrer"><ExternalLink size={16}/> Mais informações</a>
+          ) : (
+            <Link className="btn btn-dark" href={`/curso/${course.slug}`}>{course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}</Link>
+          )}
+          {links.filter(link => link.url !== course.externalUrl).map(link => <a key={link.url} className="btn" style={{border:'1px solid var(--border)'}} href={link.url} target="_blank" rel="noopener noreferrer"><ExternalLink size={15}/> {link.label}</a>)}
         </div>
       </article>;
     })}</div> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
