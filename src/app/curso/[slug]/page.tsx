@@ -15,12 +15,12 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const institution = Array.isArray(c.institution) ? c.institution.join(' / ') : c.institution;
   const own = c.institution === 'IBESC';
   const isPost = c.category === 'POS_GRADUACAO';
+  const isGrad = c.category === 'GRADUACAO';
+  const isTecnico = c.category === 'TECNICO';
   const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.url : partnerCatalogs.uninassauPos.url);
   const institutionLabel = c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
   const msg = encodeURIComponent(`Olá! Vim pelo site do IBESC e gostaria de receber informações sobre o curso de ${c.name}${isPost ? ` da ${institutionLabel}` : ''}.`);
 
-  const isGrad = c.category === 'GRADUACAO';
-  const isTecnico = c.category === 'TECNICO';
   const audience = c.audience || (isGrad
     ? `Pessoas que desejam iniciar ou fortalecer uma trajetória profissional na área de ${c.area.toLowerCase()}.`
     : isTecnico
@@ -51,7 +51,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         {isPost && <a className="btn btn-outline" href={`https://wa.me/${wa}?text=${msg}`} target="_blank" rel="noreferrer">Falar com um consultor <MessageCircle size={17} /></a>}
         {!own && !isPost && <a className="btn btn-outline" href={catalogUrl} target="_blank" rel="noreferrer">Ver catálogo oficial <ExternalLink size={17} /></a>}
       </div>
-    </div><div className="hero-card"><div className="fake-photo" /><strong>{isPost ? `Pós-graduação Digital ${institutionLabel}` : own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong></div></div></section>
+    </div><div className="hero-card" style={{overflow:'hidden',padding:0}}>{c.image ? <img src={c.image} alt={`Aulas e estrutura do ${c.name}`} style={{width:'100%',height:260,objectFit:'cover',display:'block'}} /> : <div className="fake-photo" />}<div style={{padding:'18px 20px'}}><strong>{isPost ? `Pós-graduação Digital ${institutionLabel}` : own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong></div></div></div></section>
+
+    {c.images && c.images.length > 0 && <section className="section" style={{paddingBottom:0}}><div className="container"><div className="section-head"><span className="eyebrow">Conheça a estrutura</span><h2>Vivencie a formação na prática</h2><p>Confira alguns registros relacionados ao curso técnico de enfermagem e ao ambiente de aprendizagem.</p></div><div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:18}}>{c.images.map((image, index) => <div key={image} className="card" style={{padding:0,overflow:'hidden'}}><img src={image} alt={`${c.name} — imagem ${index + 1}`} style={{display:'block',width:'100%',height:240,objectFit:'cover'}} /></div>)}</div></div></section>}
 
     <section className="section"><div className="container contact-grid"><div>
       <span className="eyebrow">Sobre a formação</span><h2>{isPost ? `Conheça a especialização em ${c.name}` : own ? 'Conheça esta formação' : `Conheça a formação em ${c.name}`}</h2><p>{c.description}</p>
@@ -62,7 +64,6 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       </div>
 
       <div className="card" style={{ marginTop: 25 }}><h3>Informações principais</h3>{infoItems.map(([label, value]) => <p key={label}><strong>{label}:</strong> {value}</p>)}</div>
-
       <div className="card" style={{ marginTop: 18 }}><h3>O que você vai aprender</h3><ul>{learning.map((item) => <li key={item} style={{ marginBottom: 8 }}>{item}</li>)}</ul></div>
       <div className="card" style={{ marginTop: 18 }}><h3>Destaques da formação</h3><ul>{highlights.map((item) => <li key={item} style={{ marginBottom: 8 }}>{item}</li>)}</ul></div>
       <div className="card" style={{ marginTop: 18 }}><h3>Quem pode fazer?</h3><p>{audience}</p><p><strong>Requisitos:</strong> {requirements}</p></div>
