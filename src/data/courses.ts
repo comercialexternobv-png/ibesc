@@ -4,7 +4,7 @@ export type Institution = 'IBESC' | 'UNINASSAU' | 'UNIFAEL';
 export interface Course {
   id: string; name: string; slug: string; category: CourseCategory; type: string;
   institution: Institution | Institution[]; area: string; modality?: string; duration?: string;
-  description: string; image?: string; status: 'ATIVO' | 'INATIVO' | 'EM_BREVE'; featured?: boolean;
+  description: string; image?: string; images?: string[]; status: 'ATIVO' | 'INATIVO' | 'EM_BREVE'; featured?: boolean;
   local?: string; startDate?: string; whatsapp?: string; externalUrl?: string; attendanceInfo?: string;
   audience?: string; learning?: string[]; highlights?: string[]; requirements?: string;
 }
@@ -48,7 +48,7 @@ export const courses: Course[] = [
   grad('grad-011', 'Letras - Português', 'letras-portugues', 'Licenciatura', 'Educação', 'Formação para docência e atuação profissional com língua portuguesa e literatura.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
   grad('grad-012', 'Matemática', 'matematica', 'Licenciatura', 'Educação', 'Formação para docência em Matemática e atuação em diferentes contextos educacionais.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
 
-  { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática.', status: 'ATIVO', featured: true },
+  { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática na área da enfermagem.', status: 'ATIVO', featured: true, image: '/images/tecnico-enfermagem-1.jpg', images: ['/images/tecnico-enfermagem-1.jpg', '/images/tecnico-enfermagem-2.jpg', '/images/tecnico-enfermagem-3.jpg'], audience: 'Pessoas que desejam ingressar ou se desenvolver profissionalmente na área da saúde por meio de uma formação técnica.', learning: ['Fundamentos e práticas de enfermagem.', 'Vivências em laboratório e situações práticas de cuidado.', 'Conhecimentos para atuação responsável em diferentes contextos de assistência.'], highlights: ['Formação técnica e prática', 'Estrutura para atividades de aprendizagem', 'Atendimento e orientação pelo IBESC'], requirements: 'Consulte o IBESC sobre requisitos de ingresso, documentação, duração e condições da turma.' },
   { id: 'tec-002', name: 'Técnico em Informática', slug: 'tecnico-em-informatica', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Tecnologia', description: 'Desenvolva conhecimentos técnicos para atuar com tecnologia, suporte e informática.', status: 'ATIVO', featured: true },
 
   pos('pos-uni-001', 'Auditoria e Controladoria', 'pos-auditoria-e-controladoria', 'UNINASSAU', 'Negócios'),
