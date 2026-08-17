@@ -87,3 +87,4 @@ export const courses: Course[] = [
 export const areas = ['Saúde', 'Negócios', 'Tecnologia', 'Educação', 'Direito', 'Gestão'];
 export const categoryLabels: Record<CourseCategory, string> = { GRADUACAO: 'Graduação', POS_GRADUACAO: 'Pós-graduação', TECNICO: 'Cursos técnicos', PROFISSIONALIZANTE: 'Profissionalizantes' };
 export function getCourseInstitution(course: Course) { return Array.isArray(course.institution) ? course.institution.join(' / ') : course.institution; }
+
