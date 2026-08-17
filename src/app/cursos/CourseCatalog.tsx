@@ -1,14 +1,14 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Search, SlidersHorizontal, Clock3, Monitor, Building2, CalendarDays, MapPin } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { categoryLabels, courses, getCourseInstitution } from '@/data/courses';
 
 const institutions = ['IBESC', 'UNINASSAU', 'UNIFAEL'] as const;
 
-export default function CourseCatalog() {
+function CourseCatalogContent() {
   const searchParams = useSearchParams();
   const [query, setQuery] = useState('');
   const [area, setArea] = useState('Todas');
@@ -67,4 +67,12 @@ export default function CourseCatalog() {
       </article>;
     })}</div> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
   </>;
+}
+
+export default function CourseCatalog() {
+  return (
+    <Suspense fallback={<div className="card" style={{padding:'40px 25px',textAlign:'center'}}>Carregando catálogo...</div>}>
+      <CourseCatalogContent />
+    </Suspense>
+  );
 }
