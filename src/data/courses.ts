@@ -6,7 +6,7 @@ export interface Course {
   institution: Institution | Institution[]; area: string; modality?: string; duration?: string;
   description: string; image?: string; images?: string[]; status: 'ATIVO' | 'INATIVO' | 'EM_BREVE';
   local?: string; startDate?: string; whatsapp?: string; externalUrl?: string; attendanceInfo?: string;
-  audience?: string; learning?: string[]; highlights?: string[]; requirements?: string;
+  audience?: string; learning?: string[]; highlights?: string[]; requirements?: string; featured?: boolean;
 }
 
 export const partnerCatalogs = {
