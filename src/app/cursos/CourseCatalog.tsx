@@ -1,20 +1,34 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Search, SlidersHorizontal, Clock3, Monitor, Building2, CalendarDays, MapPin } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 import { categoryLabels, courses, getCourseInstitution } from '@/data/courses';
 
+const institutions = ['IBESC', 'UNINASSAU', 'UNIFAEL'] as const;
+
 export default function CourseCatalog() {
+  const searchParams = useSearchParams();
   const [query, setQuery] = useState('');
   const [area, setArea] = useState('Todas');
   const [category, setCategory] = useState('Todas');
   const [institution, setInstitution] = useState('Todas');
 
+  useEffect(() => {
+    setQuery(searchParams.get('query') || '');
+    setArea(searchParams.get('area') || 'Todas');
+    setCategory(searchParams.get('category') || 'Todas');
+    setInstitution(searchParams.get('institution') || 'Todas');
+  }, [searchParams]);
+
+  const areas = useMemo(() => [...new Set(courses.filter(c => c.status === 'ATIVO').map(c => c.area))].sort((a, b) => a.localeCompare(b, 'pt-BR')), []);
+
   const filtered = useMemo(() => courses.filter((course) => {
     if (course.status !== 'ATIVO') return false;
-    const text = `${course.name} ${course.description} ${course.area} ${getCourseInstitution(course)}`.toLowerCase();
-    return text.includes(query.trim().toLowerCase())
+    const normalizedQuery = query.trim().toLowerCase();
+    const text = `${course.name} ${course.description} ${course.area} ${getCourseInstitution(course)} ${course.type}`.toLowerCase();
+    return text.includes(normalizedQuery)
       && (area === 'Todas' || course.area === area)
       && (category === 'Todas' || course.category === category)
       && (institution === 'Todas' || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(institution as 'IBESC' | 'UNINASSAU' | 'UNIFAEL'));
@@ -26,9 +40,9 @@ export default function CourseCatalog() {
   return <>
     <div className="search-box"><div className="search-grid">
       <input aria-label="Buscar curso" className="input" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Digite o nome do curso" />
-      <select aria-label="Filtrar por área" className="input" value={area} onChange={(e) => setArea(e.target.value)}><option>Todas</option>{[...new Set(courses.map(c => c.area))].map(a => <option key={a}>{a}</option>)}</select>
+      <select aria-label="Filtrar por área" className="input" value={area} onChange={(e) => setArea(e.target.value)}><option>Todas</option>{areas.map(a => <option key={a} value={a}>{a}</option>)}</select>
       <select aria-label="Filtrar por formação" className="input" value={category} onChange={(e) => setCategory(e.target.value)}><option value="Todas">Todas</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
-      <select aria-label="Filtrar por instituição" className="input" value={institution} onChange={(e) => setInstitution(e.target.value)}><option>Todas</option><option>IBESC</option><option>UNINASSAU</option><option>UNIFAEL</option></select>
+      <select aria-label="Filtrar por instituição" className="input" value={institution} onChange={(e) => setInstitution(e.target.value)}><option>Todas</option>{institutions.map(i => <option key={i} value={i}>{i}</option>)}</select>
     </div></div>
 
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:15,margin:'28px 0 18px',flexWrap:'wrap'}}>
