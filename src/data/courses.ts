@@ -1,3 +1,5 @@
+import { partnerCatalogs } from './partnerCatalogs';
+
 export type CourseCategory = 'GRADUACAO' | 'POS_GRADUACAO' | 'TECNICO' | 'PROFISSIONALIZANTE';
 export type Institution = 'IBESC' | 'UNINASSAU' | 'UNIFAEL';
 
@@ -9,15 +11,9 @@ export interface Course {
   audience?: string; learning?: string[]; highlights?: string[]; requirements?: string; featured?: boolean;
 }
 
-export const partnerCatalogs = {
-  uninassauGraduacao: { institution: 'UNINASSAU' as const, label: 'Graduação UNINASSAU', url: 'https://graduacao.uninassau.digital/nossos-cursos' },
-  uninassauPos: { institution: 'UNINASSAU' as const, label: 'Pós-graduação Digital UNINASSAU', url: 'https://ead.uninassau.edu.br/pos-digital' },
-  unifaelPos: { institution: 'UNIFAEL' as const, label: 'Pós-graduação Digital UNIFAEL — Polo Boa Viagem', url: 'https://posgrad.unifael.edu.br/digital?polo=boaviagemcentroii-ce&tipo=digital' },
-};
-
 const grad = (id: string, name: string, slug: string, type: string, area: string, description: string, attendanceInfo?: string): Course => ({
   id, name, slug, category: 'GRADUACAO', type, institution: 'UNINASSAU', area, description,
-  status: 'ATIVO', externalUrl: partnerCatalogs.uninassauGraduacao.url, attendanceInfo,
+  status: 'ATIVO', externalUrl: partnerCatalogs.uninassauGraduacao.officialUrl, attendanceInfo,
 });
 
 const pos = (
@@ -27,7 +23,7 @@ const pos = (
   id, name, slug, category: 'POS_GRADUACAO', type: 'Especialização', institution, area,
   description: extra.description || `Especialização em ${name}, com formação digital voltada ao desenvolvimento profissional na área de ${area.toLowerCase()}.`,
   duration, modality: 'Digital', status: 'ATIVO',
-  externalUrl: institution === 'UNINASSAU' ? partnerCatalogs.uninassauPos.url : partnerCatalogs.unifaelPos.url,
+  externalUrl: institution === 'UNINASSAU' ? partnerCatalogs.uninassauPos.officialUrl : partnerCatalogs.unifaelPos.officialUrl,
   audience: extra.audience || `Profissionais que desejam ampliar conhecimentos e fortalecer sua atuação em ${area.toLowerCase()}.`,
   learning: extra.learning || [`Fundamentos e conceitos de ${name}.`, `Aplicações práticas relacionadas à área de ${area.toLowerCase()}.`, 'Desenvolvimento profissional e atualização de conhecimentos.'],
   highlights: extra.highlights || ['Modalidade digital', 'Flexibilidade para estudar de onde estiver', institution === 'UNINASSAU' ? 'Aulas gravadas e encontros síncronos mensais' : 'Formação digital com acompanhamento acadêmico'],

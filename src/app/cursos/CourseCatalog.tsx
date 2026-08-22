@@ -3,46 +3,85 @@
 import Link from 'next/link';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Search, SlidersHorizontal, Clock3, Monitor, Building2, CalendarDays, MapPin } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { categoryLabels, courses, getCourseInstitution } from '@/data/courses';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { categoryLabels, courses, getCourseInstitution, type CourseCategory } from '@/data/courses';
 
 const institutions = ['IBESC', 'UNINASSAU', 'UNIFAEL'] as const;
+const allOption = 'Todas';
+const categories = Object.keys(categoryLabels) as CourseCategory[];
+
+type Filters = {
+  query: string;
+  area: string;
+  category: CourseCategory | typeof allOption;
+  institution: typeof institutions[number] | typeof allOption;
+};
+
+export function normalizeSearchText(value: string) {
+  return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLocaleLowerCase('pt-BR');
+}
 
 function CourseCatalogContent() {
   const searchParams = useSearchParams();
-  const [query, setQuery] = useState('');
-  const [area, setArea] = useState('Todas');
-  const [category, setCategory] = useState('Todas');
-  const [institution, setInstitution] = useState('Todas');
+  const router = useRouter();
+  const pathname = usePathname();
+  const urlQuery = searchParams.get('query')?.trim() || '';
+  const [query, setQuery] = useState(urlQuery);
 
   useEffect(() => {
-    setQuery(searchParams.get('query') || '');
-    setArea(searchParams.get('area') || 'Todas');
-    setCategory(searchParams.get('category') || 'Todas');
-    setInstitution(searchParams.get('institution') || 'Todas');
-  }, [searchParams]);
+    setQuery((currentQuery) => currentQuery === urlQuery ? currentQuery : urlQuery);
+  }, [urlQuery]);
+
+  useEffect(() => {
+    if (query === urlQuery) return;
+
+    const timeout = window.setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      if (query.trim()) params.set('query', query.trim());
+      else params.delete('query');
+      router.replace(params.size ? `${pathname}?${params.toString()}` : pathname, { scroll: false });
+    }, 350);
+
+    return () => window.clearTimeout(timeout);
+  }, [pathname, query, router, searchParams, urlQuery]);
 
   const areas = useMemo(() => [...new Set(courses.filter(c => c.status === 'ATIVO').map(c => c.area))].sort((a, b) => a.localeCompare(b, 'pt-BR')), []);
+  const filters: Filters = {
+    query,
+    area: areas.includes(searchParams.get('area') || '') ? searchParams.get('area')! : allOption,
+    category: categories.includes(searchParams.get('category') as CourseCategory) ? searchParams.get('category') as CourseCategory : allOption,
+    institution: institutions.includes(searchParams.get('institution') as typeof institutions[number]) ? searchParams.get('institution') as typeof institutions[number] : allOption,
+  };
 
   const filtered = useMemo(() => courses.filter((course) => {
     if (course.status !== 'ATIVO') return false;
-    const normalizedQuery = query.trim().toLowerCase();
-    const text = `${course.name} ${course.description} ${course.area} ${getCourseInstitution(course)} ${course.type}`.toLowerCase();
+    const normalizedQuery = normalizeSearchText(filters.query);
+    const text = normalizeSearchText(`${course.name} ${course.description} ${course.area} ${getCourseInstitution(course)} ${course.type} ${categoryLabels[course.category]}`);
     return text.includes(normalizedQuery)
-      && (area === 'Todas' || course.area === area)
-      && (category === 'Todas' || course.category === category)
-      && (institution === 'Todas' || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(institution as 'IBESC' | 'UNINASSAU' | 'UNIFAEL'));
-  }), [query, area, category, institution]);
+      && (filters.area === allOption || course.area === filters.area)
+      && (filters.category === allOption || course.category === filters.category)
+      && (filters.institution === allOption || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(filters.institution));
+  }), [filters]);
 
-  function clearFilters() { setQuery(''); setArea('Todas'); setCategory('Todas'); setInstitution('Todas'); }
+  function updateFilters(nextFilters: Partial<Filters>) {
+    const next = { ...filters, ...nextFilters };
+    const params = new URLSearchParams();
+    if (next.query.trim()) params.set('query', next.query.trim());
+    if (next.area !== allOption) params.set('area', next.area);
+    if (next.category !== allOption) params.set('category', next.category);
+    if (next.institution !== allOption) params.set('institution', next.institution);
+    router.push(params.size ? `${pathname}?${params.toString()}` : pathname, { scroll: false });
+  }
+
+  function clearFilters() { router.push(pathname, { scroll: false }); }
   function getTypeLabel(course: typeof courses[number]) { return course.category === 'POS_GRADUACAO' ? 'Pós-graduação Digital' : course.type; }
 
   return <>
     <div className="search-box"><div className="search-grid">
       <input aria-label="Buscar curso" className="input" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Digite o nome do curso" />
-      <select aria-label="Filtrar por área" className="input" value={area} onChange={(e) => setArea(e.target.value)}><option>Todas</option>{areas.map(a => <option key={a} value={a}>{a}</option>)}</select>
-      <select aria-label="Filtrar por formação" className="input" value={category} onChange={(e) => setCategory(e.target.value)}><option value="Todas">Todas</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
-      <select aria-label="Filtrar por instituição" className="input" value={institution} onChange={(e) => setInstitution(e.target.value)}><option>Todas</option>{institutions.map(i => <option key={i} value={i}>{i}</option>)}</select>
+      <select aria-label="Filtrar por área" className="input" value={filters.area} onChange={(e) => updateFilters({ area: e.target.value })}><option>{allOption}</option>{areas.map(a => <option key={a} value={a}>{a}</option>)}</select>
+      <select aria-label="Filtrar por formação" className="input" value={filters.category} onChange={(e) => updateFilters({ category: e.target.value as Filters['category'] })}><option value={allOption}>{allOption}</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
+      <select aria-label="Filtrar por instituição" className="input" value={filters.institution} onChange={(e) => updateFilters({ institution: e.target.value as Filters['institution'] })}><option>{allOption}</option>{institutions.map(i => <option key={i} value={i}>{i}</option>)}</select>
     </div></div>
 
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:15,margin:'28px 0 18px',flexWrap:'wrap'}}>

@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
-import { courses, partnerCatalogs } from '@/data/courses';
+import { courses } from '@/data/courses';
+import { partnerCatalogs } from '@/data/partnerCatalogs';
 import { MessageCircle, CheckCircle2, ArrowRight, ExternalLink, BookOpen, Users, Clock3 } from 'lucide-react';
 import LeadForm from './LeadForm';
 
@@ -18,7 +19,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const isPost = c.category === 'POS_GRADUACAO';
   const isGrad = c.category === 'GRADUACAO';
   const isTecnico = c.category === 'TECNICO';
-  const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.url : partnerCatalogs.uninassauPos.url);
+  const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.officialUrl : partnerCatalogs.uninassauPos.officialUrl);
   const institutionLabel = c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
   const msg = encodeURIComponent(`Olá! Vim pelo site do IBESC e gostaria de receber informações sobre o curso de ${c.name}${isPost ? ` da ${institutionLabel}` : ''}.`);
 
