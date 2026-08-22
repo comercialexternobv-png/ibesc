@@ -35,6 +35,7 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (loading) return;
     setLoading(true);
     setError('');
     setSuccess(false);
@@ -81,22 +82,22 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
 
       <label>
         Nome
-        <input required name="nome" autoComplete="name" className="input" value={nome} onChange={(event) => setNome(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
+        <input required name="nome" autoComplete="name" maxLength={120} className="input" value={nome} onChange={(event) => setNome(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
       </label>
 
       <label>
         WhatsApp
-        <input required name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" className="input" value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
+        <input required name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" maxLength={24} className="input" value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
       </label>
 
       <label>
         E-mail
-        <input name="email" type="email" autoComplete="email" className="input" value={email} onChange={(event) => setEmail(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
+        <input name="email" type="email" autoComplete="email" maxLength={254} className="input" value={email} onChange={(event) => setEmail(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
       </label>
 
       {error && <p role="alert" style={{ margin: '4px 0 14px', color: '#b42318' }}>{error}</p>}
 
-      {success && <p role="status" style={{ margin: '4px 0 14px', color: 'var(--green)' }}>Seus dados foram enviados. Estamos abrindo o WhatsApp para você falar com um consultor.</p>}
+      {success && <p role="status" aria-live="polite" style={{ margin: '4px 0 14px', color: 'var(--green)' }}>Seus dados foram enviados. Estamos abrindo o WhatsApp para você falar com um consultor.</p>}
 
       <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
         {loading ? 'Enviando...' : <><Send size={18} /> Quero receber informações</>}
