@@ -1,14 +1,15 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { courses, partnerCatalogs } from '@/data/courses';
 import { MessageCircle, CheckCircle2, ArrowRight, ExternalLink, BookOpen, Users, Clock3 } from 'lucide-react';
 import LeadForm from './LeadForm';
 
 const wa = '5588988498031';
-export function generateStaticParams() { return courses.map((c) => ({ slug: c.slug })); }
+export function generateStaticParams() { return [...courses.map((c) => ({ slug: c.slug })), { slug: 'tecnico-em-informatica' }]; }
 
 export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  if (slug === 'tecnico-em-informatica') redirect('/curso/curso-basico-de-informatica');
   const c = courses.find((x) => x.slug === slug);
   if (!c) return notFound();
 
@@ -50,7 +51,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
       <div className="card" style={{ marginTop: 18 }}><h3>Quem pode fazer?</h3><p>{audience}</p><p><strong>Requisitos:</strong> {requirements}</p></div>
       {isPost && <div className="card" style={{ marginTop: 18 }}><h3>Como funciona</h3><p>O IBESC apresenta a formação e realiza o atendimento comercial. Para confirmar matriz curricular, condições, matrícula e regras acadêmicas, consulte a página oficial da instituição responsável.</p><a className="btn btn-primary" href={catalogUrl} target="_blank" rel="noreferrer" style={{ marginTop: 8 }}>Acessar página oficial <ExternalLink size={17} /></a></div>}
       {!isPost && <div className="card" style={{ marginTop: 18 }}><h3>Próximos passos</h3><p>Fale com o IBESC para confirmar disponibilidade, modalidade, documentação, condições atuais e o processo de matrícula.</p><a className="btn btn-primary" href={`https://wa.me/${wa}?text=${msg}`} style={{ marginTop: 8 }}>Falar com um consultor <MessageCircle size={17} /></a></div>}
-    </div><div className="card"><h3>Quero receber informações</h3><LeadForm courseName={c.name} tipoFormacao={c.category} instituicao={institution} /></div></div></section>
+    </div><div className="card"><h3>Quero receber informações</h3><LeadForm courseName={c.name} tipoFormacao={c.category} tipoComercial={c.type} instituicao={institution} /></div></div></section>
 
     <section className="section" style={{ background: 'var(--light)' }}><div className="container"><div className="section-head"><span className="eyebrow">Conheça melhor</span><h2>{isPost ? 'Informações oficiais e atendimento IBESC' : own ? 'Por que escolher o IBESC?' : 'Por que considerar esta formação?'}</h2><p>{isPost ? 'As informações desta página foram organizadas a partir das ofertas divulgadas pelas instituições parceiras. Condições comerciais e acadêmicas podem mudar e devem ser confirmadas na página oficial.' : 'O IBESC orienta você sobre disponibilidade, documentação, condições e próximos passos.'}</p></div><div className="diff-grid">{(isPost ? ['Modalidade digital', `Oferta pela ${institutionLabel}`, 'Conteúdo e informações do curso', 'Orientação comercial IBESC'] : own ? ['Formação direcionada', 'Atendimento próximo', 'Orientação para matrícula', 'Foco no seu próximo passo'] : ['Informações oficiais', 'Orientação comercial', 'Catálogo atualizado', 'Suporte para matrícula']).map((x) => <div className="card diff-card" key={x}><CheckCircle2 /><h3>{x}</h3><p>{isPost ? 'Consulte a plataforma oficial para confirmar detalhes atualizados da oferta.' : 'O consultor IBESC ajuda você a encontrar e encaminhar a opção adequada.'}</p></div>)}</div></div></section>
     <section className="section"><div className="container"><div className="cta"><h2>{isPost ? `Quer conhecer a oferta da ${institutionLabel}?` : own ? 'Quer saber mais sobre este curso?' : 'Quer verificar as opções disponíveis?'}</h2><p>{isPost ? 'Acesse a página oficial para consultar a oferta completa ou fale com o IBESC.' : 'Fale com o IBESC e receba orientação sobre disponibilidade e matrícula.'}</p><div className="hero-actions">{isPost ? <a className="btn btn-dark" href={catalogUrl} target="_blank" rel="noreferrer">Ver curso na {institutionLabel} <ExternalLink size={17} /></a> : <a className="btn btn-dark" href={`https://wa.me/${wa}?text=${msg}`}>Falar no WhatsApp</a>}<a className="btn btn-outline" style={{ background: 'var(--navy)' }} href={`https://wa.me/${wa}?text=${msg}`}>Falar com o IBESC <MessageCircle size={17} /></a></div></div></div></section>

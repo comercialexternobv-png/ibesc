@@ -8,10 +8,11 @@ const wa = '5588988498031';
 type LeadFormProps = {
   courseName: string;
   tipoFormacao: string;
+  tipoComercial: string;
   instituicao: string;
 };
 
-export default function LeadForm({ courseName, tipoFormacao, instituicao }: LeadFormProps) {
+export default function LeadForm({ courseName, tipoFormacao, tipoComercial, instituicao }: LeadFormProps) {
   const [nome, setNome] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
@@ -20,15 +21,15 @@ export default function LeadForm({ courseName, tipoFormacao, instituicao }: Lead
   const [error, setError] = useState('');
 
   const tipoLabel =
-    tipoFormacao === 'GRADUACAO'
+    tipoComercial === 'Curso Básico'
+      ? 'curso básico'
+      : tipoComercial === 'Curso Técnico'
+        ? 'curso técnico'
+        : tipoFormacao === 'GRADUACAO'
       ? 'graduação'
       : tipoFormacao === 'POS_GRADUACAO'
         ? 'pós-graduação'
-        : tipoFormacao === 'TECNICO'
-          ? 'curso técnico'
-          : tipoFormacao === 'PROFISSIONALIZANTE'
-            ? 'curso profissionalizante'
-            : 'curso';
+        : 'curso';
 
   const mensagemWhatsapp = `Olá! Vim pelo site do IBESC e acabei de solicitar informações sobre o curso de ${courseName} (${tipoLabel}${instituicao ? ` — ${instituicao}` : ''}). Meu nome é ${nome}. Gostaria de receber informações sobre matrícula e próximos passos.`;
 
