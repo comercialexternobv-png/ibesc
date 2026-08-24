@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { MessageCircle, Send } from 'lucide-react';
 
 const whatsappUrl = 'https://wa.me/5588988498031?text=' + encodeURIComponent('Olá! Vim pelo site do IBESC e gostaria de receber informações sobre os cursos.');
@@ -13,6 +13,8 @@ export default function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [website, setWebsite] = useState('');
+  const formStartedAt = useRef(Date.now());
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,6 +36,8 @@ export default function ContactForm() {
           instituicao: 'IBESC',
           origem: 'Site - Página de Contato',
           mensagem,
+          website,
+          form_started_at: formStartedAt.current,
         }),
       });
 
@@ -43,6 +47,8 @@ export default function ContactForm() {
       setWhatsapp('');
       setEmail('');
       setMensagem('');
+      setWebsite('');
+      formStartedAt.current = Date.now();
       setSuccess(true);
     } catch {
       setError(true);
@@ -54,6 +60,7 @@ export default function ContactForm() {
   return <div className="card">
     <h3>Quero receber informações</h3>
     <form onSubmit={handleSubmit}>
+      <div className="form-honeypot" aria-hidden="true"><label htmlFor="contact-website">Não preencha este campo</label><input id="contact-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} /></div>
       <label htmlFor="contact-name" className="sr-only">Nome</label><input id="contact-name" required name="nome" autoComplete="name" maxLength={120} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="Nome" value={nome} onChange={(event) => setNome(event.target.value)} />
       <label htmlFor="contact-whatsapp" className="sr-only">WhatsApp</label><input id="contact-whatsapp" required name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" maxLength={24} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="WhatsApp" value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} />
       <label htmlFor="contact-email" className="sr-only">E-mail</label><input id="contact-email" name="email" type="email" autoComplete="email" maxLength={254} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="E-mail" value={email} onChange={(event) => setEmail(event.target.value)} />

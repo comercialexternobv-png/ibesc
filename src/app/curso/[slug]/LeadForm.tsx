@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { MessageCircle, Send } from 'lucide-react';
 
 const wa = '5588988498031';
@@ -19,6 +19,8 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const [website, setWebsite] = useState('');
+  const formStartedAt = useRef(Date.now());
 
   const tipoLabel =
     tipoComercial === 'Curso Básico'
@@ -53,6 +55,8 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
           instituicao,
           origem: 'site-curso',
           mensagem: `Lead interessado no curso ${courseName}.`,
+          website,
+          form_started_at: formStartedAt.current,
         }),
       });
 
@@ -63,6 +67,8 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
       }
 
       setSuccess(true);
+      setWebsite('');
+      formStartedAt.current = Date.now();
 
       window.open(
         `https://wa.me/${wa}?text=${encodeURIComponent(mensagemWhatsapp)}`,
@@ -78,6 +84,7 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
 
   return (
     <form onSubmit={handleSubmit}>
+      <div className="form-honeypot" aria-hidden="true"><label htmlFor={`course-website-${courseName}`}>Não preencha este campo</label><input id={`course-website-${courseName}`} name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} /></div>
       <p>Deixe seus dados e fale com nossa equipe sobre o próximo passo.</p>
 
       <label>

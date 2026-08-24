@@ -1,0 +1,18 @@
+.courseDetailCard {
+  background: #fff;
+  border-color: var(--border);
+  color: var(--text);
+  box-shadow: 0 10px 35px rgba(29, 77, 138, 0.07);
+}
+
+.courseDetailCard h3 {
+  color: var(--navy);
+}
+
+.courseDetailCard p {
+  color: var(--muted);
+}
+
+.courseDetailCard svg {
+  color: var(--blue);
+}

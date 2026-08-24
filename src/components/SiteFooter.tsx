@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function SiteFooter() {
   return (
     <footer className="footer">
       <div className="container footer-grid">
         <div>
-          <img className="footer-logo" src="/images/LOGO OFICIAL.jpeg" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" />
+          <Image className="footer-logo" src="/images/LOGO OFICIAL.jpeg" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" width={400} height={140} />
           <p>Sua formação. Seu próximo passo.</p>
         </div>
         <div>

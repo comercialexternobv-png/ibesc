@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -34,7 +35,7 @@ export default function SiteHeader() {
     <header className="header">
       <div className="container nav">
         <Link href="/" className="brand" aria-label="IBESC - início" onClick={closeMenu}>
-          <img className="brand-logo" src="/images/LOGO OFICIAL.jpeg" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" />
+          <Image className="brand-logo" src="/images/LOGO OFICIAL.jpeg" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" width={400} height={140} priority />
           <span className="sr-only">IBESC</span>
         </Link>
 

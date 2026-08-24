@@ -1,4 +1,5 @@
 import { partnerCatalogs } from './partnerCatalogs';
+import { unicorpCourses } from './unicorpCourses';
 
 export type CourseCategory = 'GRADUACAO' | 'POS_GRADUACAO' | 'TECNICO' | 'PROFISSIONALIZANTE';
 export type Institution = 'IBESC' | 'UNINASSAU' | 'UNIFAEL';
@@ -8,7 +9,7 @@ export interface Course {
   institution: Institution | Institution[]; area: string; modality?: string; duration?: string;
   description: string; image?: string; images?: string[]; status: 'ATIVO' | 'INATIVO' | 'EM_BREVE';
   local?: string; startDate?: string; whatsapp?: string; externalUrl?: string; attendanceInfo?: string;
-  audience?: string; learning?: string[]; highlights?: string[]; requirements?: string; featured?: boolean;
+  audience?: string; learning?: string[]; highlights?: string[]; requirements?: string; observations?: string[]; featured?: boolean;
 }
 
 const grad = (id: string, name: string, slug: string, type: string, area: string, description: string, attendanceInfo?: string): Course => ({
@@ -44,8 +45,10 @@ export const courses: Course[] = [
   grad('grad-011', 'Letras - Português', 'letras-portugues', 'Licenciatura', 'Educação', 'Formação para docência e atuação profissional com língua portuguesa e literatura.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
   grad('grad-012', 'Matemática', 'matematica', 'Licenciatura', 'Educação', 'Formação para docência em Matemática e atuação em diferentes contextos educacionais.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
 
-  { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática na área da enfermagem.', status: 'ATIVO', featured: true, image: '/images/tecnico-enfermagem-1.png', images: ['/images/tecnico-enfermagem-1.png', '/images/tecnico-enfermagem-2.png', '/images/tecnico-enfermagem-3.png', '/images/tecnico-enfermagem-4.png'], audience: 'Pessoas que desejam ingressar ou se desenvolver profissionalmente na área da saúde por meio de uma formação técnica.', learning: ['Fundamentos e práticas de enfermagem.', 'Vivências em laboratório e situações práticas de cuidado.', 'Conhecimentos para atuação responsável em diferentes contextos de assistência.'], highlights: ['Formação técnica e prática', 'Estrutura para atividades de aprendizagem', 'Atendimento e orientação pelo IBESC'], requirements: 'Consulte o IBESC sobre requisitos de ingresso, documentação, duração e condições da turma.' },
+  { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática na área da enfermagem.', status: 'ATIVO', featured: true, image: '/images/tecnico-enfermagem-1.webp', images: ['/images/tecnico-enfermagem-1.webp', '/images/tecnico-enfermagem-2.webp', '/images/tecnico-enfermagem-3.webp', '/images/tecnico-enfermagem-4.webp'], audience: 'Pessoas que desejam ingressar ou se desenvolver profissionalmente na área da saúde por meio de uma formação técnica.', learning: ['Fundamentos e práticas de enfermagem.', 'Vivências em laboratório e situações práticas de cuidado.', 'Conhecimentos para atuação responsável em diferentes contextos de assistência.'], highlights: ['Formação técnica e prática', 'Estrutura para atividades de aprendizagem', 'Atendimento e orientação pelo IBESC'], requirements: 'Consulte o IBESC sobre requisitos de ingresso, documentação, duração e condições da turma.' },
   { id: 'tec-002', name: 'Curso Básico de Informática', slug: 'curso-basico-de-informatica', category: 'PROFISSIONALIZANTE', type: 'Curso Básico', institution: 'IBESC', area: 'Tecnologia', description: 'Desenvolva conhecimentos básicos para utilizar tecnologia e informática no dia a dia profissional.', status: 'ATIVO', featured: true },
+
+  ...unicorpCourses,
 
   pos('pos-uni-001', 'Auditoria e Controladoria', 'pos-auditoria-e-controladoria', 'UNINASSAU', 'Negócios'),
   pos('pos-uni-002', 'Administração Pública e Direito Público', 'pos-administracao-publica-e-direito-publico', 'UNINASSAU', 'Negócios'),
@@ -80,6 +83,39 @@ export const courses: Course[] = [
   pos('pos-ufa-012', 'Orientação Educacional', 'unifael-orientacao-educacional', 'UNIFAEL', 'Educação', '12 meses'),
 ];
 
+function validateCourseCatalog(items: Course[]) {
+  const ids = new Set<string>();
+  const slugs = new Set<string>();
+  for (const course of items) {
+    if (!course.id || !course.name || !course.slug || !course.description || !course.area) throw new Error(`Curso com dados obrigatórios incompletos: ${course.id || course.slug || 'sem identificação'}`);
+    if (ids.has(course.id)) throw new Error(`ID de curso duplicado: ${course.id}`);
+    if (slugs.has(course.slug)) throw new Error(`Slug de curso duplicado: ${course.slug}`);
+    ids.add(course.id);
+    slugs.add(course.slug);
+  }
+}
+
+validateCourseCatalog(courses);
+
 export const areas = ['Saúde', 'Negócios', 'Tecnologia', 'Educação', 'Direito', 'Gestão'];
 export const categoryLabels: Record<CourseCategory, string> = { GRADUACAO: 'Graduação', POS_GRADUACAO: 'Pós-graduação', TECNICO: 'Cursos técnicos', PROFISSIONALIZANTE: 'Profissionalizantes' };
 export function getCourseInstitution(course: Course) { return Array.isArray(course.institution) ? course.institution.join(' / ') : course.institution; }
+
+const courseAreaImages: Record<string, string> = {
+  Direito: '/images/course-areas/direito.webp',
+  Educação: '/images/course-areas/educacao.webp',
+  Engenharia: '/images/course-areas/engenharia.webp',
+  Gestão: '/images/course-areas/gestao-negocios.webp',
+  'Gestão e Negócios': '/images/course-areas/gestao-negocios.webp',
+  Negócios: '/images/course-areas/gestao-negocios.webp',
+  Psicologia: '/images/course-areas/psicologia.webp',
+  Saúde: '/images/course-areas/saude-bem-estar.webp',
+  'Saúde e Bem-estar': '/images/course-areas/saude-bem-estar.webp',
+  'Serviço Social': '/images/course-areas/servico-social.webp',
+  Tecnologia: '/images/course-areas/tecnologia.webp',
+  'Tecnologia da Informação e Comunicação': '/images/course-areas/tecnologia.webp',
+};
+
+export function getCourseImage(course: Course) {
+  return course.image || courseAreaImages[course.area] || '/images/LOGO OFICIAL.jpeg';
+}

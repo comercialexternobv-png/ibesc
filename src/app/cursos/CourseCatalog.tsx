@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import { Search, SlidersHorizontal, Clock3, Monitor, Building2, CalendarDays, MapPin } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { categoryLabels, courses, getCourseInstitution, type CourseCategory } from '@/data/courses';
+import { categoryLabels, courses, getCourseImage, getCourseInstitution, type CourseCategory } from '@/data/courses';
 
 const institutions = ['IBESC', 'UNINASSAU', 'UNIFAEL'] as const;
 const allOption = 'Todas';
@@ -46,22 +46,25 @@ function CourseCatalogContent() {
   }, [pathname, query, router, searchParams, urlQuery]);
 
   const areas = useMemo(() => [...new Set(courses.filter(c => c.status === 'ATIVO').map(c => c.area))].sort((a, b) => a.localeCompare(b, 'pt-BR')), []);
+  const selectedArea = areas.includes(searchParams.get('area') || '') ? searchParams.get('area')! : allOption;
+  const selectedCategory = categories.includes(searchParams.get('category') as CourseCategory) ? searchParams.get('category') as CourseCategory : allOption;
+  const selectedInstitution = institutions.includes(searchParams.get('institution') as typeof institutions[number]) ? searchParams.get('institution') as typeof institutions[number] : allOption;
   const filters: Filters = {
     query,
-    area: areas.includes(searchParams.get('area') || '') ? searchParams.get('area')! : allOption,
-    category: categories.includes(searchParams.get('category') as CourseCategory) ? searchParams.get('category') as CourseCategory : allOption,
-    institution: institutions.includes(searchParams.get('institution') as typeof institutions[number]) ? searchParams.get('institution') as typeof institutions[number] : allOption,
+    area: selectedArea,
+    category: selectedCategory,
+    institution: selectedInstitution,
   };
 
   const filtered = useMemo(() => courses.filter((course) => {
     if (course.status !== 'ATIVO') return false;
-    const normalizedQuery = normalizeSearchText(filters.query);
+    const normalizedQuery = normalizeSearchText(query);
     const text = normalizeSearchText(`${course.name} ${course.description} ${course.area} ${getCourseInstitution(course)} ${course.type} ${categoryLabels[course.category]}`);
     return text.includes(normalizedQuery)
-      && (filters.area === allOption || course.area === filters.area)
-      && (filters.category === allOption || course.category === filters.category)
-      && (filters.institution === allOption || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(filters.institution));
-  }), [filters]);
+      && (selectedArea === allOption || course.area === selectedArea)
+      && (selectedCategory === allOption || course.category === selectedCategory)
+      && (selectedInstitution === allOption || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(selectedInstitution));
+  }), [query, selectedArea, selectedCategory, selectedInstitution]);
 
   function updateFilters(nextFilters: Partial<Filters>) {
     const next = { ...filters, ...nextFilters };
@@ -92,7 +95,7 @@ function CourseCatalogContent() {
     {filtered.length ? <div className="course-grid">{filtered.map(course => {
       const institution = getCourseInstitution(course); const isPost = course.category === 'POS_GRADUACAO'; const isGrad = course.category === 'GRADUACAO';
       return <article className="card course-card" key={course.id}>
-        <div className="course-image" style={course.image ? {backgroundImage:`url(${course.image})`,backgroundSize:'cover',backgroundPosition:'center'} : undefined} aria-hidden="true" />
+        <div className="course-image" style={{backgroundImage:`url(${getCourseImage(course)})`,backgroundSize:'cover',backgroundPosition:'center'}} aria-hidden="true" />
         <span className="tag">{getTypeLabel(course)}</span><h3>{course.name}</h3>
         <div className="course-meta"><Building2 size={14}/> {institution} <span>•</span> {course.area}</div><p>{course.description}</p>
         <div style={{display:'grid',gap:8,margin:'16px 0 20px',fontSize:13,color:'var(--muted)'}}>
@@ -101,7 +104,7 @@ function CourseCatalogContent() {
           {course.attendanceInfo && <div style={{display:'flex',alignItems:'flex-start',gap:7}}><CalendarDays size={15}/><span><strong style={{color:'var(--text)'}}>Presencial:</strong> {course.attendanceInfo.replace(/^Encontros presenciais\s*/i, '')}</span></div>}
           {!isPost && !course.attendanceInfo && course.local && <div style={{display:'flex',alignItems:'center',gap:7}}><MapPin size={15}/><span><strong style={{color:'var(--text)'}}>Local:</strong> {course.local}</span></div>}
         </div>
-        {isPost && <div style={{fontSize:12,lineHeight:1.5,padding:'10px 12px',borderRadius:10,background:'var(--light)',marginBottom:18}}>Informações acadêmicas e condições atuais devem ser confirmadas na página oficial da instituição.</div>}
+        {isPost && <div style={{fontSize:12,lineHeight:1.5,padding:'10px 12px',borderRadius:10,background:'var(--light)',marginBottom:18}}>{course.institution === 'IBESC' ? 'Informações acadêmicas, disponibilidade e condições atuais devem ser confirmadas com o IBESC.' : 'Informações acadêmicas e condições atuais devem ser confirmadas na página oficial da instituição.'}</div>}
         <Link className="btn btn-dark" href={`/curso/${course.slug}`}>{isPost ? 'Ver detalhes da pós' : isGrad ? 'Ver detalhes da graduação' : course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}</Link>
       </article>;
     })}</div> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}

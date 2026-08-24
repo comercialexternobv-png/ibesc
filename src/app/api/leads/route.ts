@@ -22,6 +22,12 @@ type LeadPayload = {
   mensagem: string | null;
 };
 
+type StoredLead = LeadPayload & {
+  id: string;
+  created_at: string;
+  status: 'NOVO';
+};
+
 function text(value: unknown, limit: number) {
   return typeof value === 'string' ? value.trim().slice(0, limit) : '';
 }
@@ -39,10 +45,67 @@ function invalid(message: string) {
   return NextResponse.json({ error: message }, { status: 400 });
 }
 
+function supabaseHeaders(key: string) {
+  const headers: Record<string, string> = {
+    apikey: key,
+    'Content-Type': 'application/json',
+    Prefer: 'return=minimal',
+  };
+
+  // As chaves legadas são JWTs e também precisam do cabeçalho Authorization.
+  // As chaves modernas sb_publishable_/sb_secret_ são enviadas apenas em apikey.
+  if (!key.startsWith('sb_')) headers.Authorization = `Bearer ${key}`;
+
+  return headers;
+}
+
+async function syncLeadToGoogleSheet(lead: StoredLead) {
+  const webhookUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const syncToken = process.env.GOOGLE_SHEETS_SYNC_TOKEN;
+  if (!webhookUrl || !syncToken) return;
+
+  let endpoint: URL;
+  try {
+    endpoint = new URL(webhookUrl);
+  } catch {
+    console.error('URL de sincronização da planilha inválida.');
+    return;
+  }
+
+  if (endpoint.protocol !== 'https:' || endpoint.hostname !== 'script.google.com') {
+    console.error('Destino de sincronização da planilha não permitido.');
+    return;
+  }
+
+  try {
+    const response = await fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...lead, sync_token: syncToken }),
+      cache: 'no-store',
+      signal: AbortSignal.timeout(8000),
+    });
+    const result = (await response.json().catch(() => null)) as { ok?: boolean } | null;
+
+    if (!response.ok || !result?.ok) {
+      console.error('Falha ao sincronizar lead com a planilha.', { status: response.status });
+    }
+  } catch {
+    // O registro já está preservado no Supabase. Assim, uma indisponibilidade
+    // da planilha não induz o visitante a reenviar e criar duplicidade.
+    console.error('Erro de conexão ao sincronizar lead com a planilha.');
+  }
+}
+
 function validateLeadPayload(body: unknown): LeadPayload | { error: string } {
   if (!body || typeof body !== 'object' || Array.isArray(body)) return { error: 'Dados do formulário inválidos.' };
 
   const data = body as Record<string, unknown>;
+  const honeypot = typeof data.website === 'string' ? data.website.trim() : '';
+  const startedAt = typeof data.form_started_at === 'number' ? data.form_started_at : 0;
+  const elapsed = Date.now() - startedAt;
+  if (honeypot) return { error: 'spam' };
+  if (!startedAt || elapsed < 1500 || elapsed > 2 * 60 * 60 * 1000) return { error: 'Formulário expirado. Atualize a página e tente novamente.' };
   if (
     exceedsLimit(data.nome, limits.nome) || exceedsLimit(data.whatsapp, limits.whatsapp) ||
     exceedsLimit(data.email, limits.email) || exceedsLimit(data.curso, limits.curso) ||
@@ -76,24 +139,29 @@ async function handleLeadRequest(request: Request) {
   }
 
   const payload = validateLeadPayload(body);
-  if ('error' in payload) return invalid(payload.error);
+  if ('error' in payload) {
+    if (payload.error === 'spam') return NextResponse.json({ success: true });
+    return invalid(payload.error);
+  }
 
   const url = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const key = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) {
     return NextResponse.json({ error: 'Serviço de leads indisponível no momento.' }, { status: 503 });
   }
 
+  const storedLead: StoredLead = {
+    ...payload,
+    id: crypto.randomUUID(),
+    created_at: new Date().toISOString(),
+    status: 'NOVO',
+  };
+
   try {
     const response = await fetch(`${url}/rest/v1/leads`, {
       method: 'POST',
-      headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
-        'Content-Type': 'application/json',
-        Prefer: 'return=minimal',
-      },
-      body: JSON.stringify(payload),
+      headers: supabaseHeaders(key),
+      body: JSON.stringify(storedLead),
       cache: 'no-store',
     });
 
@@ -101,6 +169,8 @@ async function handleLeadRequest(request: Request) {
       console.error('Falha ao registrar lead no Supabase.', { status: response.status });
       return NextResponse.json({ error: 'Não foi possível registrar o lead.' }, { status: 502 });
     }
+
+    await syncLeadToGoogleSheet(storedLead);
 
     return NextResponse.json({ success: true });
   } catch {
