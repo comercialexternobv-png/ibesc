@@ -69,12 +69,6 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
       setSuccess(true);
       setWebsite('');
       formStartedAt.current = Date.now();
-
-      window.open(
-        `https://wa.me/${wa}?text=${encodeURIComponent(mensagemWhatsapp)}`,
-        '_blank',
-        'noopener,noreferrer'
-      );
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Não foi possível enviar seus dados.');
     } finally {
@@ -104,7 +98,12 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
 
       {error && <p role="alert" style={{ margin: '4px 0 14px', color: '#b42318' }}>{error}</p>}
 
-      {success && <p role="status" aria-live="polite" style={{ margin: '4px 0 14px', color: 'var(--green)' }}>Seus dados foram enviados. Estamos abrindo o WhatsApp para você falar com um consultor.</p>}
+      {success && <div role="status" aria-live="polite" style={{ margin: '4px 0 14px' }}>
+        <p style={{ color: 'var(--green)' }}>Seus dados foram enviados com sucesso.</p>
+        <a className="btn btn-dark" style={{ width: '100%' }} href={`https://wa.me/${wa}?text=${encodeURIComponent(mensagemWhatsapp)}`} target="_blank" rel="noopener noreferrer">
+          <MessageCircle size={18} /> Continuar no WhatsApp
+        </a>
+      </div>}
 
       <button type="submit" className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
         {loading ? 'Enviando...' : <><Send size={18} /> Quero receber informações</>}
