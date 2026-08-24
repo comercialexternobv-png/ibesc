@@ -35,6 +35,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const isPartnerPost = isPost && !own;
   const isGrad = c.category === 'GRADUACAO';
   const isTecnico = c.category === 'TECNICO';
+  const isProfessionalizing = c.category === 'PROFISSIONALIZANTE';
   const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.officialUrl : partnerCatalogs.uninassauPos.officialUrl);
   const institutionLabel = c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
   const msg = encodeURIComponent(`Olá! Vim pelo site do IBESC e gostaria de receber informações sobre o curso de ${c.name}${isPost ? ` da ${institutionLabel}` : ''}.`);
@@ -49,13 +50,13 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   return <main>
     <section className="hero"><div className="container hero-grid"><div>
       <span className="eyebrow" style={{ background: 'rgba(255,255,255,.12)', color: '#fff' }}>{isPost ? 'Pós-graduação Digital' : c.type}</span>
-      <h1 style={{ maxWidth: 850 }}>{c.name}</h1><p>{institutionLabel} • {c.area}</p>
+      <h1 className="course-hero-title" style={{ maxWidth: 850 }}>{c.name}</h1><p>{institutionLabel} • {c.area}</p>
       <div className="hero-actions">
         {isPartnerPost ? <a className="btn btn-primary" href={catalogUrl} target="_blank" rel="noreferrer">Ver curso na {institutionLabel} <ExternalLink size={17} /></a> : <a className="btn btn-primary" href={`https://wa.me/${wa}?text=${msg}`}>{own ? 'Quero me matricular' : 'Falar com um consultor'} <ArrowRight size={17} /></a>}
         {isPartnerPost && <a className="btn btn-outline" href={`https://wa.me/${wa}?text=${msg}`}>Falar com um consultor <MessageCircle size={17} /></a>}
         {!own && !isPost && <a className="btn btn-outline" href={catalogUrl} target="_blank" rel="noreferrer">Ver catálogo oficial <ExternalLink size={17} /></a>}
       </div>
-    </div><div className="hero-card" style={{overflow:'hidden',padding:0}}><Image src={getCourseImage(c)} alt={`Imagem de ${c.name}`} width={1200} height={800} priority sizes="(max-width: 800px) 100vw, 45vw" style={{width:'100%',height:300,objectFit:'cover',display:'block'}} /><div style={{padding:'18px 20px'}}><strong>{isPost ? `Pós-graduação Digital ${institutionLabel}` : own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong></div></div></div></section>
+    </div><div className="hero-card" style={{overflow:'hidden',padding:0}}><Image src={getCourseImage(c)} alt={`Imagem de ${c.name}`} width={1200} height={800} priority sizes="(max-width: 800px) 100vw, 45vw" style={{width:'100%',height:300,objectFit:'cover',display:'block'}} /><div style={{padding:'18px 20px'}}><strong>{isPost ? `Pós-graduação Digital ${institutionLabel}` : isProfessionalizing ? 'Curso ofertado pelo IBESC' : own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong></div></div></div></section>
 
     {c.images && c.images.length > 0 && <section className="section" style={{paddingBottom:0}}><div className="container"><div className="section-head"><span className="eyebrow">Conheça a estrutura</span><h2>Veja o Técnico em Enfermagem de perto</h2><p>Conheça os ambientes e momentos de aprendizagem apresentados pelo IBESC.</p></div><div style={{display:'grid',gridTemplateColumns:'repeat(2,minmax(0,1fr))',gap:18}}>{c.images.map((image, index) => <div key={image} className="card" style={{padding:0,overflow:'hidden',borderRadius:16}}><Image src={image} alt={`${c.name} — imagem ${index + 1}`} width={1200} height={900} sizes="(max-width: 800px) 100vw, 50vw" style={{display:'block',width:'100%',height:280,objectFit:'cover'}} /></div>)}</div></div></section>}
 

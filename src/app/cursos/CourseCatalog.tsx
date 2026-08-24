@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { Search, SlidersHorizontal, Clock3, Monitor, Building2, CalendarDays, MapPin } from 'lucide-react';
+import { Search, SlidersHorizontal, Clock3, Monitor, Building2 } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { categoryLabels, courses, getCourseImage, getCourseInstitution, type CourseCategory } from '@/data/courses';
 
@@ -10,6 +10,7 @@ const institutions = ['IBESC', 'UNINASSAU', 'UNIFAEL'] as const;
 const modalities = ['EAD', 'Semipresencial', 'Digital'] as const;
 const allOption = 'Todas';
 const categories = Object.keys(categoryLabels) as CourseCategory[];
+const pageSize = 18;
 
 type Filters = {
   query: string;
@@ -29,6 +30,7 @@ function CourseCatalogContent() {
   const pathname = usePathname();
   const urlQuery = searchParams.get('query')?.trim() || '';
   const [query, setQuery] = useState(urlQuery);
+  const [visibleCount, setVisibleCount] = useState(pageSize);
 
   useEffect(() => {
     setQuery((currentQuery) => currentQuery === urlQuery ? currentQuery : urlQuery);
@@ -71,6 +73,12 @@ function CourseCatalogContent() {
       && (selectedModality === allOption || course.modality === selectedModality);
   }), [query, selectedArea, selectedCategory, selectedInstitution, selectedModality]);
 
+  useEffect(() => {
+    setVisibleCount(pageSize);
+  }, [query, selectedArea, selectedCategory, selectedInstitution, selectedModality]);
+
+  const visibleCourses = filtered.slice(0, visibleCount);
+
   function updateFilters(nextFilters: Partial<Filters>) {
     const next = { ...filters, ...nextFilters };
     const params = new URLSearchParams();
@@ -88,10 +96,10 @@ function CourseCatalogContent() {
   return <>
     <div className="search-box"><div className="search-grid">
       <input aria-label="Buscar curso" className="input" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Digite o nome do curso" />
-      <select aria-label="Filtrar por área" className="input" value={filters.area} onChange={(e) => updateFilters({ area: e.target.value })}><option>{allOption}</option>{areas.map(a => <option key={a} value={a}>{a}</option>)}</select>
-      <select aria-label="Filtrar por formação" className="input" value={filters.category} onChange={(e) => updateFilters({ category: e.target.value as Filters['category'] })}><option value={allOption}>{allOption}</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
-      <select aria-label="Filtrar por instituição" className="input" value={filters.institution} onChange={(e) => updateFilters({ institution: e.target.value as Filters['institution'] })}><option>{allOption}</option>{institutions.map(i => <option key={i} value={i}>{i}</option>)}</select>
-      <select aria-label="Filtrar por modalidade" className="input" value={filters.modality} onChange={(e) => updateFilters({ modality: e.target.value as Filters['modality'] })}><option>{allOption}</option>{modalities.map(modality => <option key={modality} value={modality}>{modality}</option>)}</select>
+      <select aria-label="Filtrar por área" className="input" value={filters.area} onChange={(e) => updateFilters({ area: e.target.value })}><option value={allOption}>Todas as áreas</option>{areas.map(a => <option key={a} value={a}>{a}</option>)}</select>
+      <select aria-label="Filtrar por formação" className="input" value={filters.category} onChange={(e) => updateFilters({ category: e.target.value as Filters['category'] })}><option value={allOption}>Todas as formações</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
+      <select aria-label="Filtrar por instituição" className="input" value={filters.institution} onChange={(e) => updateFilters({ institution: e.target.value as Filters['institution'] })}><option value={allOption}>Todas as instituições</option>{institutions.map(i => <option key={i} value={i}>{i}</option>)}</select>
+      <select aria-label="Filtrar por modalidade" className="input" value={filters.modality} onChange={(e) => updateFilters({ modality: e.target.value as Filters['modality'] })}><option value={allOption}>Todas as modalidades</option>{modalities.map(modality => <option key={modality} value={modality}>{modality}</option>)}</select>
     </div></div>
 
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:15,margin:'28px 0 18px',flexWrap:'wrap'}}>
@@ -99,22 +107,20 @@ function CourseCatalogContent() {
       <span style={{color:'var(--muted)',fontSize:14}}><SlidersHorizontal size={15} style={{verticalAlign:'middle',marginRight:5}}/>Filtros aplicados em tempo real</span>
     </div>
 
-    {filtered.length ? <div className="course-grid">{filtered.map(course => {
+    {filtered.length ? <><div className="course-grid">{visibleCourses.map(course => {
       const institution = getCourseInstitution(course); const isPost = course.category === 'POS_GRADUACAO'; const isGrad = course.category === 'GRADUACAO';
-      return <article className="card course-card" key={course.id}>
+      return <article className="card course-card catalog-course-card" key={course.id}>
         <div className="course-image" style={{backgroundImage:`url(${getCourseImage(course)})`,backgroundSize:'cover',backgroundPosition:'center'}} aria-hidden="true" />
         <span className="tag">{getTypeLabel(course)}</span><h3>{course.name}</h3>
-        <div className="course-meta"><Building2 size={14}/> {institution} <span>•</span> {course.area}</div><p>{course.description}</p>
-        <div style={{display:'grid',gap:8,margin:'16px 0 20px',fontSize:13,color:'var(--muted)'}}>
+        <div className="course-meta"><Building2 size={14}/> {institution} <span>•</span> {course.area}</div><p className="course-card-description">{course.description}</p>
+        <div className="course-card-details">
           {course.modality && <div style={{display:'flex',alignItems:'center',gap:7}}><Monitor size={15}/><span><strong style={{color:'var(--text)'}}>Modalidade:</strong> {course.modality}</span></div>}
           {course.duration && <div style={{display:'flex',alignItems:'center',gap:7}}><Clock3 size={15}/><span><strong style={{color:'var(--text)'}}>Duração:</strong> {course.duration}</span></div>}
-          {course.attendanceInfo && <div style={{display:'flex',alignItems:'flex-start',gap:7}}><CalendarDays size={15}/><span><strong style={{color:'var(--text)'}}>Presencial:</strong> {course.attendanceInfo.replace(/^Encontros presenciais\s*/i, '')}</span></div>}
-          {!isPost && !course.attendanceInfo && course.local && <div style={{display:'flex',alignItems:'center',gap:7}}><MapPin size={15}/><span><strong style={{color:'var(--text)'}}>Local:</strong> {course.local}</span></div>}
         </div>
         {isPost && <div style={{fontSize:12,lineHeight:1.5,padding:'10px 12px',borderRadius:10,background:'var(--light)',marginBottom:18}}>{course.institution === 'IBESC' ? 'Informações acadêmicas, disponibilidade e condições atuais devem ser confirmadas com o IBESC.' : 'Informações acadêmicas e condições atuais devem ser confirmadas na página oficial da instituição.'}</div>}
         <Link className="btn btn-dark" href={`/curso/${course.slug}`}>{isPost ? 'Ver detalhes da pós' : isGrad ? 'Ver detalhes da graduação' : course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}</Link>
       </article>;
-    })}</div> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
+    })}</div>{visibleCount < filtered.length && <div className="catalog-load-more"><button className="btn btn-dark" onClick={() => setVisibleCount(count => count + pageSize)}>Carregar mais cursos</button><span>Exibindo {visibleCourses.length} de {filtered.length}</span></div>}</> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
   </>;
 }
 
