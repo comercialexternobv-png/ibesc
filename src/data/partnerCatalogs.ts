@@ -12,7 +12,7 @@ export const partnerCatalogs: Record<string, PartnerCatalog> = {
     institution: 'UNINASSAU',
     category: 'GRADUACAO',
     label: 'Graduação UNINASSAU',
-    officialUrl: 'https://graduacao.uninassau.digital/nossos-cursos',
+    officialUrl: 'https://graduacao.uninassau.digital/',
     sourceType: 'catalogo_externo',
   },
   uninassauPos: {

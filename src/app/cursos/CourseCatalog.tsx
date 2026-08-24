@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { categoryLabels, courses, getCourseImage, getCourseInstitution, type CourseCategory } from '@/data/courses';
 
 const institutions = ['IBESC', 'UNINASSAU', 'UNIFAEL'] as const;
+const modalities = ['EAD', 'Semipresencial', 'Digital'] as const;
 const allOption = 'Todas';
 const categories = Object.keys(categoryLabels) as CourseCategory[];
 
@@ -15,6 +16,7 @@ type Filters = {
   area: string;
   category: CourseCategory | typeof allOption;
   institution: typeof institutions[number] | typeof allOption;
+  modality: typeof modalities[number] | typeof allOption;
 };
 
 export function normalizeSearchText(value: string) {
@@ -49,11 +51,13 @@ function CourseCatalogContent() {
   const selectedArea = areas.includes(searchParams.get('area') || '') ? searchParams.get('area')! : allOption;
   const selectedCategory = categories.includes(searchParams.get('category') as CourseCategory) ? searchParams.get('category') as CourseCategory : allOption;
   const selectedInstitution = institutions.includes(searchParams.get('institution') as typeof institutions[number]) ? searchParams.get('institution') as typeof institutions[number] : allOption;
+  const selectedModality = modalities.includes(searchParams.get('modality') as typeof modalities[number]) ? searchParams.get('modality') as typeof modalities[number] : allOption;
   const filters: Filters = {
     query,
     area: selectedArea,
     category: selectedCategory,
     institution: selectedInstitution,
+    modality: selectedModality,
   };
 
   const filtered = useMemo(() => courses.filter((course) => {
@@ -63,8 +67,9 @@ function CourseCatalogContent() {
     return text.includes(normalizedQuery)
       && (selectedArea === allOption || course.area === selectedArea)
       && (selectedCategory === allOption || course.category === selectedCategory)
-      && (selectedInstitution === allOption || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(selectedInstitution));
-  }), [query, selectedArea, selectedCategory, selectedInstitution]);
+      && (selectedInstitution === allOption || (Array.isArray(course.institution) ? course.institution : [course.institution]).includes(selectedInstitution))
+      && (selectedModality === allOption || course.modality === selectedModality);
+  }), [query, selectedArea, selectedCategory, selectedInstitution, selectedModality]);
 
   function updateFilters(nextFilters: Partial<Filters>) {
     const next = { ...filters, ...nextFilters };
@@ -73,6 +78,7 @@ function CourseCatalogContent() {
     if (next.area !== allOption) params.set('area', next.area);
     if (next.category !== allOption) params.set('category', next.category);
     if (next.institution !== allOption) params.set('institution', next.institution);
+    if (next.modality !== allOption) params.set('modality', next.modality);
     router.push(params.size ? `${pathname}?${params.toString()}` : pathname, { scroll: false });
   }
 
@@ -85,6 +91,7 @@ function CourseCatalogContent() {
       <select aria-label="Filtrar por área" className="input" value={filters.area} onChange={(e) => updateFilters({ area: e.target.value })}><option>{allOption}</option>{areas.map(a => <option key={a} value={a}>{a}</option>)}</select>
       <select aria-label="Filtrar por formação" className="input" value={filters.category} onChange={(e) => updateFilters({ category: e.target.value as Filters['category'] })}><option value={allOption}>{allOption}</option>{Object.entries(categoryLabels).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select>
       <select aria-label="Filtrar por instituição" className="input" value={filters.institution} onChange={(e) => updateFilters({ institution: e.target.value as Filters['institution'] })}><option>{allOption}</option>{institutions.map(i => <option key={i} value={i}>{i}</option>)}</select>
+      <select aria-label="Filtrar por modalidade" className="input" value={filters.modality} onChange={(e) => updateFilters({ modality: e.target.value as Filters['modality'] })}><option>{allOption}</option>{modalities.map(modality => <option key={modality} value={modality}>{modality}</option>)}</select>
     </div></div>
 
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:15,margin:'28px 0 18px',flexWrap:'wrap'}}>
@@ -99,7 +106,7 @@ function CourseCatalogContent() {
         <span className="tag">{getTypeLabel(course)}</span><h3>{course.name}</h3>
         <div className="course-meta"><Building2 size={14}/> {institution} <span>•</span> {course.area}</div><p>{course.description}</p>
         <div style={{display:'grid',gap:8,margin:'16px 0 20px',fontSize:13,color:'var(--muted)'}}>
-          {isPost && <div style={{display:'flex',alignItems:'center',gap:7}}><Monitor size={15}/><span><strong style={{color:'var(--text)'}}>Modalidade:</strong> Digital</span></div>}
+          {(isPost || isGrad) && course.modality && <div style={{display:'flex',alignItems:'center',gap:7}}><Monitor size={15}/><span><strong style={{color:'var(--text)'}}>Modalidade:</strong> {course.modality}</span></div>}
           {course.duration && <div style={{display:'flex',alignItems:'center',gap:7}}><Clock3 size={15}/><span><strong style={{color:'var(--text)'}}>Duração:</strong> {course.duration}</span></div>}
           {course.attendanceInfo && <div style={{display:'flex',alignItems:'flex-start',gap:7}}><CalendarDays size={15}/><span><strong style={{color:'var(--text)'}}>Presencial:</strong> {course.attendanceInfo.replace(/^Encontros presenciais\s*/i, '')}</span></div>}
           {!isPost && !course.attendanceInfo && course.local && <div style={{display:'flex',alignItems:'center',gap:7}}><MapPin size={15}/><span><strong style={{color:'var(--text)'}}>Local:</strong> {course.local}</span></div>}

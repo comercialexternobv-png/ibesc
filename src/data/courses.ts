@@ -12,9 +12,18 @@ export interface Course {
   audience?: string; learning?: string[]; highlights?: string[]; requirements?: string; observations?: string[]; featured?: boolean;
 }
 
-const grad = (id: string, name: string, slug: string, type: string, area: string, description: string, attendanceInfo?: string): Course => ({
-  id, name, slug, category: 'GRADUACAO', type, institution: 'UNINASSAU', area, description,
-  status: 'ATIVO', externalUrl: partnerCatalogs.uninassauGraduacao.officialUrl, attendanceInfo,
+type GraduationModality = 'Semipresencial' | 'EAD';
+
+const grad = (
+  id: string, name: string, slug: string, type: string, area: string, modality: GraduationModality,
+  description = `${type} com formação voltada ao desenvolvimento de competências profissionais em ${area.toLowerCase()}.`,
+): Course => ({
+  id, name, slug, category: 'GRADUACAO', type, institution: 'UNINASSAU', area, modality, description,
+  status: 'ATIVO', local: 'Polo Boa Viagem — CE', externalUrl: partnerCatalogs.uninassauGraduacao.officialUrl,
+  attendanceInfo: modality === 'Semipresencial'
+    ? 'Atividades presenciais no Polo Boa Viagem — CE, conforme calendário acadêmico e dinâmica do curso.'
+    : undefined,
+  observations: ['Oferta divulgada para o Polo Boa Viagem — CE. Consulte o IBESC para confirmar disponibilidade, duração, calendário e condições da turma.'],
 });
 
 const pos = (
@@ -32,18 +41,59 @@ const pos = (
 });
 
 export const courses: Course[] = [
-  grad('grad-001', 'Enfermagem', 'enfermagem', 'Bacharelado', 'Saúde', 'Formação superior para quem deseja construir uma trajetória profissional na área da saúde.'),
-  grad('grad-002', 'Administração', 'administracao', 'Bacharelado', 'Negócios', 'Formação para desenvolver competências de gestão, negócios e liderança.'),
-  grad('grad-003', 'Pedagogia', 'pedagogia', 'Licenciatura', 'Educação', 'Formação superior para atuação em diferentes contextos educacionais.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-004', 'Nutrição', 'nutricao', 'Bacharelado', 'Saúde', 'Formação para atuação na promoção da saúde, alimentação e acompanhamento nutricional.', 'Encontros presenciais semanais.'),
-  grad('grad-005', 'Educação Especial', 'educacao-especial', 'Licenciatura', 'Educação', 'Formação para atuação educacional com foco em inclusão e educação especial.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-006', 'Ciências Biológicas', 'ciencias-biologicas', 'Licenciatura', 'Educação', 'Formação para atuação no ensino e em diferentes áreas relacionadas às ciências biológicas.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-007', 'Geografia', 'geografia', 'Licenciatura', 'Educação', 'Formação para atuação no ensino de Geografia e em áreas relacionadas ao território e sociedade.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-008', 'História', 'historia', 'Licenciatura', 'Educação', 'Formação para atuação no ensino e na análise dos processos históricos e sociais.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-009', 'Letras - Espanhol', 'letras-espanhol', 'Licenciatura', 'Educação', 'Formação para docência e atuação profissional com língua e literatura espanhola.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-010', 'Letras - Inglês', 'letras-ingles', 'Licenciatura', 'Educação', 'Formação para docência e atuação profissional com língua e literatura inglesa.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-011', 'Letras - Português', 'letras-portugues', 'Licenciatura', 'Educação', 'Formação para docência e atuação profissional com língua portuguesa e literatura.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
-  grad('grad-012', 'Matemática', 'matematica', 'Licenciatura', 'Educação', 'Formação para docência em Matemática e atuação em diferentes contextos educacionais.', 'Encontros presenciais durante o semestre, conforme calendário acadêmico e atividades do curso.'),
+  grad('grad-001', 'Arquitetura e Urbanismo', 'arquitetura-e-urbanismo', 'Bacharelado', 'Engenharia', 'Semipresencial'),
+  grad('grad-002', 'Gestão Ambiental', 'gestao-ambiental', 'Tecnólogo', 'Gestão', 'Semipresencial'),
+  grad('grad-003', 'Gestão Hospitalar', 'gestao-hospitalar', 'Tecnólogo', 'Saúde', 'Semipresencial'),
+  grad('grad-004', 'Terapia Ocupacional', 'terapia-ocupacional', 'Bacharelado', 'Saúde', 'Semipresencial'),
+  grad('grad-005', 'Biomedicina', 'biomedicina', 'Bacharelado', 'Saúde', 'Semipresencial'),
+  grad('grad-006', 'Educação Física - Bacharelado', 'educacao-fisica-bacharelado', 'Bacharelado', 'Saúde', 'Semipresencial'),
+  grad('grad-007', 'Estética e Cosmética', 'estetica-e-cosmetica', 'Tecnólogo', 'Saúde', 'Semipresencial'),
+  grad('grad-008', 'Farmácia', 'farmacia', 'Bacharelado', 'Saúde', 'Semipresencial'),
+  grad('grad-009', 'Fisioterapia', 'fisioterapia', 'Bacharelado', 'Saúde', 'Semipresencial'),
+  grad('grad-010', 'Nutrição', 'nutricao', 'Bacharelado', 'Saúde', 'Semipresencial', 'Formação para atuação na promoção da saúde, alimentação e acompanhamento nutricional.'),
+  grad('grad-011', 'Podologia', 'podologia', 'Tecnólogo', 'Saúde', 'Semipresencial'),
+  grad('grad-012', 'Educação Especial', 'educacao-especial', 'Licenciatura', 'Educação', 'Semipresencial', 'Formação para atuação educacional com foco em inclusão e educação especial.'),
+  grad('grad-013', 'Educação Física - Licenciatura', 'educacao-fisica-licenciatura', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-014', 'Ciências Biológicas', 'ciencias-biologicas', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-015', 'Geografia', 'geografia', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-016', 'História', 'historia', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-017', 'Letras - Espanhol', 'letras-espanhol', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-018', 'Letras - Inglês', 'letras-ingles', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-019', 'Letras - Português', 'letras-portugues', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-020', 'Matemática', 'matematica', 'Licenciatura', 'Educação', 'Semipresencial'),
+  grad('grad-021', 'Pedagogia', 'pedagogia', 'Licenciatura', 'Educação', 'Semipresencial', 'Formação superior para atuação em diferentes contextos educacionais.'),
+  grad('grad-022', 'Engenharia Civil', 'engenharia-civil', 'Bacharelado', 'Engenharia', 'Semipresencial'),
+  grad('grad-023', 'Engenharia de Produção', 'engenharia-de-producao', 'Bacharelado', 'Engenharia', 'Semipresencial'),
+  grad('grad-024', 'Engenharia Elétrica', 'engenharia-eletrica', 'Bacharelado', 'Engenharia', 'Semipresencial'),
+  grad('grad-025', 'Engenharia Mecânica', 'engenharia-mecanica', 'Bacharelado', 'Engenharia', 'Semipresencial'),
+
+  grad('grad-026', 'Administração', 'administracao', 'Bacharelado', 'Negócios', 'EAD', 'Formação para desenvolver competências de gestão, negócios e liderança.'),
+  grad('grad-027', 'Ciências Aeronáuticas', 'ciencias-aeronauticas', 'Bacharelado', 'Negócios', 'EAD'),
+  grad('grad-028', 'Ciências Contábeis', 'ciencias-contabeis', 'Bacharelado', 'Negócios', 'EAD'),
+  grad('grad-029', 'Ciências Econômicas', 'ciencias-economicas', 'Bacharelado', 'Negócios', 'EAD'),
+  grad('grad-030', 'Teologia', 'teologia', 'Bacharelado', 'Educação', 'EAD'),
+  grad('grad-031', 'Análise e Desenvolvimento de Sistemas', 'analise-e-desenvolvimento-de-sistemas', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-032', 'Banco de Dados', 'banco-de-dados', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-033', 'Coaching e Mentoring', 'coaching-e-mentoring', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-034', 'Design de Interiores', 'design-de-interiores', 'Tecnólogo', 'Engenharia', 'EAD'),
+  grad('grad-035', 'Data Science', 'data-science', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-036', 'Gastronomia', 'gastronomia', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-037', 'Gestão Comercial', 'gestao-comercial', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-038', 'Gestão da Qualidade', 'gestao-da-qualidade', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-039', 'Gestão de Tecnologia da Informação', 'gestao-de-tecnologia-da-informacao', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-040', 'Gestão de Recursos Humanos', 'gestao-de-recursos-humanos', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-041', 'Gestão de Serviços Jurídicos e Notariais', 'gestao-de-servicos-juridicos-e-notariais', 'Tecnólogo', 'Direito', 'EAD'),
+  grad('grad-042', 'Gestão de Trânsito', 'gestao-de-transito', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-043', 'Gestão Financeira', 'gestao-financeira', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-044', 'Gestão Pública', 'gestao-publica', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-045', 'Jogos Digitais', 'jogos-digitais', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-046', 'Logística', 'logistica', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-047', 'Marketing', 'marketing', 'Tecnólogo', 'Negócios', 'EAD'),
+  grad('grad-048', 'Negócios Imobiliários', 'negocios-imobiliarios', 'Tecnólogo', 'Negócios', 'EAD'),
+  grad('grad-049', 'Processos Gerenciais', 'processos-gerenciais', 'Tecnólogo', 'Gestão', 'EAD'),
+  grad('grad-050', 'Produção Audiovisual', 'producao-audiovisual', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-051', 'Segurança da Informação', 'seguranca-da-informacao', 'Tecnólogo', 'Tecnologia', 'EAD'),
+  grad('grad-052', 'Segurança Pública', 'seguranca-publica', 'Tecnólogo', 'Gestão', 'EAD'),
 
   { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática na área da enfermagem.', status: 'ATIVO', featured: true, image: '/images/tecnico-enfermagem-1.webp', images: ['/images/tecnico-enfermagem-1.webp', '/images/tecnico-enfermagem-2.webp', '/images/tecnico-enfermagem-3.webp', '/images/tecnico-enfermagem-4.webp'], audience: 'Pessoas que desejam ingressar ou se desenvolver profissionalmente na área da saúde por meio de uma formação técnica.', learning: ['Fundamentos e práticas de enfermagem.', 'Vivências em laboratório e situações práticas de cuidado.', 'Conhecimentos para atuação responsável em diferentes contextos de assistência.'], highlights: ['Formação técnica e prática', 'Estrutura para atividades de aprendizagem', 'Atendimento e orientação pelo IBESC'], requirements: 'Consulte o IBESC sobre requisitos de ingresso, documentação, duração e condições da turma.' },
   { id: 'tec-002', name: 'Curso Básico de Informática', slug: 'curso-basico-de-informatica', category: 'PROFISSIONALIZANTE', type: 'Curso Básico', institution: 'IBESC', area: 'Tecnologia', description: 'Desenvolva conhecimentos básicos para utilizar tecnologia e informática no dia a dia profissional.', status: 'ATIVO', featured: true },
