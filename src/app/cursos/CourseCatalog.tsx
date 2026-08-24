@@ -106,7 +106,7 @@ function CourseCatalogContent() {
         <span className="tag">{getTypeLabel(course)}</span><h3>{course.name}</h3>
         <div className="course-meta"><Building2 size={14}/> {institution} <span>•</span> {course.area}</div><p>{course.description}</p>
         <div style={{display:'grid',gap:8,margin:'16px 0 20px',fontSize:13,color:'var(--muted)'}}>
-          {(isPost || isGrad) && course.modality && <div style={{display:'flex',alignItems:'center',gap:7}}><Monitor size={15}/><span><strong style={{color:'var(--text)'}}>Modalidade:</strong> {course.modality}</span></div>}
+          {course.modality && <div style={{display:'flex',alignItems:'center',gap:7}}><Monitor size={15}/><span><strong style={{color:'var(--text)'}}>Modalidade:</strong> {course.modality}</span></div>}
           {course.duration && <div style={{display:'flex',alignItems:'center',gap:7}}><Clock3 size={15}/><span><strong style={{color:'var(--text)'}}>Duração:</strong> {course.duration}</span></div>}
           {course.attendanceInfo && <div style={{display:'flex',alignItems:'flex-start',gap:7}}><CalendarDays size={15}/><span><strong style={{color:'var(--text)'}}>Presencial:</strong> {course.attendanceInfo.replace(/^Encontros presenciais\s*/i, '')}</span></div>}
           {!isPost && !course.attendanceInfo && course.local && <div style={{display:'flex',alignItems:'center',gap:7}}><MapPin size={15}/><span><strong style={{color:'var(--text)'}}>Local:</strong> {course.local}</span></div>}

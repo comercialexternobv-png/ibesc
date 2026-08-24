@@ -1,5 +1,6 @@
 import { partnerCatalogs } from './partnerCatalogs';
 import { unicorpCourses } from './unicorpCourses';
+import { professionalizingCourses } from './professionalizingCourses';
 
 export type CourseCategory = 'GRADUACAO' | 'POS_GRADUACAO' | 'TECNICO' | 'PROFISSIONALIZANTE';
 export type Institution = 'IBESC' | 'UNINASSAU' | 'UNIFAEL';
@@ -116,6 +117,8 @@ export const courses: Course[] = [
 
   { id: 'tec-001', name: 'Técnico em Enfermagem', slug: 'tecnico-em-enfermagem', category: 'TECNICO', type: 'Curso Técnico', institution: 'IBESC', area: 'Saúde', description: 'Prepare-se para novas oportunidades profissionais com uma formação técnica e prática na área da enfermagem.', status: 'ATIVO', featured: true, image: '/images/tecnico-enfermagem-1.webp', images: ['/images/tecnico-enfermagem-1.webp', '/images/tecnico-enfermagem-2.webp', '/images/tecnico-enfermagem-3.webp', '/images/tecnico-enfermagem-4.webp'], audience: 'Pessoas que desejam ingressar ou se desenvolver profissionalmente na área da saúde por meio de uma formação técnica.', learning: ['Fundamentos e práticas de enfermagem.', 'Vivências em laboratório e situações práticas de cuidado.', 'Conhecimentos para atuação responsável em diferentes contextos de assistência.'], highlights: ['Formação técnica e prática', 'Estrutura para atividades de aprendizagem', 'Atendimento e orientação pelo IBESC'], requirements: 'Consulte o IBESC sobre requisitos de ingresso, documentação, duração e condições da turma.' },
   { id: 'tec-002', name: 'Curso Básico de Informática', slug: 'curso-basico-de-informatica', category: 'PROFISSIONALIZANTE', type: 'Curso Básico', institution: 'IBESC', area: 'Tecnologia', description: 'Desenvolva conhecimentos básicos para utilizar tecnologia e informática no dia a dia profissional.', status: 'ATIVO', featured: true },
+
+  ...professionalizingCourses,
 
   ...unicorpCourses,
 
