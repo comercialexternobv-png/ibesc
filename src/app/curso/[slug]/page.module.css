@@ -1,3 +1,10 @@
+.courseDetailStack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
 .courseDetailCard {
   background: #fff;
   border-color: var(--border);
