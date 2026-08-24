@@ -13,4 +13,5 @@ export const siteInfo = {
   postalCode: '63870-000',
   country: 'BR',
   googleMapsUrl: 'https://share.google/Zs6JxOuNTB30CFknK',
+  googleMapsDirectionsUrl: 'https://www.google.com/maps/dir/?api=1&destination=Rua%20Deputado%20David%20Capistrano%2C%20802%2C%20V%C3%A1rzea%20do%20Canto%2C%20Boa%20Viagem%20-%20CE%2C%2063870-000',
 } as const;
