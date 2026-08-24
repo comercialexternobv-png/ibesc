@@ -14,16 +14,35 @@ export interface Course {
 
 type GraduationModality = 'Semipresencial' | 'EAD';
 
+const graduationDurations: Record<string, string> = {
+  'arquitetura-e-urbanismo': '60 meses', 'gestao-ambiental': '24 meses', 'gestao-hospitalar': '36 meses',
+  'terapia-ocupacional': '48 meses', biomedicina: '48 meses', 'educacao-fisica-bacharelado': '48 meses',
+  'estetica-e-cosmetica': '30 meses', farmacia: '60 meses', fisioterapia: '60 meses', nutricao: '48 meses',
+  'educacao-especial': '48 meses', 'educacao-fisica-licenciatura': '48 meses', 'ciencias-biologicas': '48 meses',
+  historia: '48 meses', 'letras-ingles': '48 meses', 'letras-portugues': '48 meses', matematica: '48 meses',
+  pedagogia: '48 meses', 'engenharia-civil': '60 meses', 'engenharia-de-producao': '60 meses',
+  'engenharia-eletrica': '60 meses', 'engenharia-mecanica': '60 meses', administracao: '48 meses',
+  'ciencias-aeronauticas': '36 meses', 'ciencias-contabeis': '48 meses', 'ciencias-economicas': '48 meses',
+  'analise-e-desenvolvimento-de-sistemas': '30 meses', 'banco-de-dados': '30 meses',
+  'design-de-interiores': '24 meses', gastronomia: '24 meses', 'gestao-comercial': '24 meses',
+  'gestao-da-qualidade': '24 meses', 'gestao-de-tecnologia-da-informacao': '30 meses',
+  'gestao-de-recursos-humanos': '24 meses', 'gestao-de-servicos-juridicos-e-notariais': '24 meses',
+  'gestao-de-transito': '24 meses', 'gestao-financeira': '24 meses', 'gestao-publica': '24 meses',
+  logistica: '24 meses', marketing: '24 meses', 'negocios-imobiliarios': '24 meses',
+  'processos-gerenciais': '24 meses', 'seguranca-da-informacao': '30 meses', 'seguranca-publica': '24 meses',
+};
+
 const grad = (
   id: string, name: string, slug: string, type: string, area: string, modality: GraduationModality,
   description = `${type} com formação voltada ao desenvolvimento de competências profissionais em ${area.toLowerCase()}.`,
 ): Course => ({
-  id, name, slug, category: 'GRADUACAO', type, institution: 'UNINASSAU', area, modality, description,
+  id, name, slug, category: 'GRADUACAO', type, institution: 'UNINASSAU', area, modality,
+  duration: graduationDurations[slug], description,
   status: 'ATIVO', local: 'Polo Boa Viagem — CE', externalUrl: partnerCatalogs.uninassauGraduacao.officialUrl,
   attendanceInfo: modality === 'Semipresencial'
     ? 'Atividades presenciais no Polo Boa Viagem — CE, conforme calendário acadêmico e dinâmica do curso.'
     : undefined,
-  observations: ['Oferta divulgada para o Polo Boa Viagem — CE. Consulte o IBESC para confirmar disponibilidade, duração, calendário e condições da turma.'],
+  observations: ['Oferta divulgada para o Polo Boa Viagem — CE. Consulte o IBESC para confirmar disponibilidade, calendário e condições da turma.'],
 });
 
 const pos = (
