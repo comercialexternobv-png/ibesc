@@ -11,8 +11,8 @@ export default function SiteFooter() {
         </div>
         <div>
           <h4>Formações</h4>
-          <Link href="/graduacao">Graduação</Link>
-          <Link href="/pos-graduacao">Pós-graduação</Link>
+          <Link href="/cursos?category=GRADUACAO">Graduação</Link>
+          <Link href="/cursos?category=POS_GRADUACAO">Pós-graduação</Link>
           <Link href="/cursos-tecnicos">Cursos Técnicos</Link>
           <Link href="/cursos">Todos os Cursos</Link>
         </div>

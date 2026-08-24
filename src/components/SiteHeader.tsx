@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 
 const navigation = [
   { href: '/', label: 'Home' },
-  { href: '/graduacao', label: 'Graduação' },
-  { href: '/pos-graduacao', label: 'Pós-graduação' },
+  { href: '/cursos?category=GRADUACAO', label: 'Graduação' },
+  { href: '/cursos?category=POS_GRADUACAO', label: 'Pós-graduação' },
   { href: '/cursos-tecnicos', label: 'Cursos Técnicos' },
   { href: '/cursos', label: 'Todos os Cursos' },
   { href: '/sobre', label: 'Sobre' },
