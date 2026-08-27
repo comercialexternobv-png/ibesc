@@ -189,5 +189,5 @@ const courseAreaImages: Record<string, string> = {
 };
 
 export function getCourseImage(course: Course) {
-  return course.image || courseAreaImages[course.area] || '/images/LOGO OFICIAL.jpeg';
+  return course.image || courseAreaImages[course.area] || '/images/ibesc-logo-transparent.png';
 }

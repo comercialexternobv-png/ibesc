@@ -27,3 +27,8 @@ body{min-width:0;overflow-x:hidden}.mobile-navigation{display:none}.course-image
 @media(max-width:520px){.hero-brand-main{padding:20px}.hero-brand-main img{height:100px}.hero-partners{padding:17px}.hero-partners>div{gap:14px}.hero-partners img{height:38px}.institution-section>.container{padding:20px}.institution-card{display:block}.institution-card>img,.institution-ibesc>img{height:58px;margin-bottom:14px}.institution-card p{margin:8px 0 14px}}
 .structure-card{padding:0;overflow:hidden}.structure-card img{display:block;width:100%;height:210px;object-fit:cover}.structure-card h3{margin:22px 22px 8px}.structure-card p{margin:0 22px 24px;color:var(--muted);line-height:1.6}
 .form-honeypot{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important}
+
+/* Official IBESC logo: transparent asset and stronger visual presence */
+.nav{height:88px}.brand-logo{height:76px;max-width:230px}.footer-logo{height:104px;max-width:250px}.hero-brand-main{padding:22px 34px}.hero-brand-main img{width:min(100%,390px);height:210px;margin:0 auto}.institution-ibesc>img{height:92px;transform:scale(1.12)}
+@media(max-width:900px){.hero-brand-main img{height:180px}}
+@media(max-width:600px){.nav{height:76px}.brand-logo{height:64px;max-width:190px}.hero-brand-main img{height:150px}.institution-card>img.institution-ibesc,.institution-ibesc>img{height:78px;transform:none}}

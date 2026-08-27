@@ -19,9 +19,9 @@ export const metadata: Metadata = {
     locale: 'pt_BR',
     siteName: 'IBESC',
     url: '/',
-    images: [{ url: '/images/LOGO OFICIAL.jpeg', alt: 'IBESC' }],
+    images: [{ url: '/images/ibesc-logo-transparent.png', alt: 'IBESC' }],
   },
-  twitter: { card: 'summary_large_image', title: 'IBESC | Sua formação. Seu próximo passo.', description: 'Formação para novos caminhos profissionais em Boa Viagem — CE.', images: ['/images/LOGO OFICIAL.jpeg'] },
+  twitter: { card: 'summary_large_image', title: 'IBESC | Sua formação. Seu próximo passo.', description: 'Formação para novos caminhos profissionais em Boa Viagem — CE.', images: ['/images/ibesc-logo-transparent.png'] },
 };
 
 const organizationSchema = {

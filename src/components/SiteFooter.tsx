@@ -6,7 +6,7 @@ export default function SiteFooter() {
     <footer className="footer">
       <div className="container footer-grid">
         <div>
-          <Image className="footer-logo" src="/images/LOGO OFICIAL.jpeg" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" width={400} height={140} />
+          <Image className="footer-logo" src="/images/ibesc-logo-transparent.png" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" width={400} height={140} />
           <p>Sua formação. Seu próximo passo.</p>
         </div>
         <div>

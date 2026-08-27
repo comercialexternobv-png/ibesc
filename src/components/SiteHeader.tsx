@@ -35,7 +35,7 @@ export default function SiteHeader() {
     <header className="header">
       <div className="container nav">
         <Link href="/" className="brand" aria-label="IBESC - início" onClick={closeMenu}>
-          <Image className="brand-logo" src="/images/LOGO OFICIAL.jpeg" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" width={400} height={140} priority />
+          <Image className="brand-logo" src="/images/ibesc-logo-transparent.png" alt="IBESC - Instituto Brasileiro de Educação, Saúde e Cultura" width={400} height={140} priority />
           <span className="sr-only">IBESC</span>
         </Link>
 
