@@ -2,25 +2,33 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const navigation = [
-  { href: '/', label: 'Home' },
+const courseNavigation = [
   { href: '/cursos?category=GRADUACAO', label: 'Graduação' },
   { href: '/cursos?category=POS_GRADUACAO', label: 'Pós-graduação' },
   { href: '/cursos-tecnicos', label: 'Cursos Técnicos' },
+  { href: '/cursos?category=PROFISSIONALIZANTE', label: 'Profissionalizantes' },
   { href: '/cursos', label: 'Todos os Cursos' },
+];
+
+const navigation = [
+  { href: '/', label: 'Home' },
   { href: '/sobre', label: 'Sobre' },
   { href: '/contato', label: 'Contato' },
 ];
 
 export default function SiteHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isCoursesOpen, setIsCoursesOpen] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') setIsOpen(false);
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        setIsCoursesOpen(false);
+      }
     }
 
     window.addEventListener('keydown', handleKeyDown);
@@ -29,6 +37,7 @@ export default function SiteHeader() {
 
   function closeMenu() {
     setIsOpen(false);
+    setIsCoursesOpen(false);
   }
 
   return (
@@ -40,7 +49,17 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="nav-links" aria-label="Navegação principal">
-          {navigation.map((item) => <Link key={item.href} href={item.href}>{item.label}</Link>)}
+          <Link href="/">Home</Link>
+          <div className={`courses-dropdown${isCoursesOpen ? ' is-open' : ''}`}>
+            <button type="button" aria-expanded={isCoursesOpen} aria-controls="desktop-courses-menu" onClick={() => setIsCoursesOpen((open) => !open)}>
+              Cursos <ChevronDown size={15} aria-hidden="true" />
+            </button>
+            <div id="desktop-courses-menu" className="courses-dropdown-menu">
+              {courseNavigation.map((item) => <Link key={item.href} href={item.href} onClick={closeMenu}>{item.label}</Link>)}
+            </div>
+          </div>
+          <Link href="/sobre">Sobre</Link>
+          <Link href="/contato">Contato</Link>
         </nav>
 
         <button
@@ -56,7 +75,14 @@ export default function SiteHeader() {
       </div>
 
       <nav id="mobile-navigation" className={`mobile-navigation${isOpen ? ' is-open' : ''}`} aria-label="Navegação móvel">
-        {navigation.map((item) => <Link key={item.href} href={item.href} onClick={closeMenu}>{item.label}</Link>)}
+        <Link href="/" onClick={closeMenu}>Home</Link>
+        <button type="button" className="mobile-courses-toggle" aria-expanded={isCoursesOpen} aria-controls="mobile-courses-menu" onClick={() => setIsCoursesOpen((open) => !open)}>
+          Cursos <ChevronDown size={17} aria-hidden="true" />
+        </button>
+        <div id="mobile-courses-menu" className={`mobile-courses-list${isCoursesOpen ? ' is-open' : ''}`}>
+          {courseNavigation.map((item) => <Link key={item.href} href={item.href} onClick={closeMenu}>{item.label}</Link>)}
+        </div>
+        {navigation.slice(1).map((item) => <Link key={item.href} href={item.href} onClick={closeMenu}>{item.label}</Link>)}
       </nav>
     </header>
   );
