@@ -36,8 +36,9 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const isGrad = c.category === 'GRADUACAO';
   const isTecnico = c.category === 'TECNICO';
   const isProfessionalizing = c.category === 'PROFISSIONALIZANTE';
+  const isUnicorpCourse = c.id.startsWith('ibesc-unicorp-');
   const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.officialUrl : partnerCatalogs.uninassauPos.officialUrl);
-  const institutionLabel = c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
+  const institutionLabel = isUnicorpCourse ? 'IBESC em parceria com a Unicorp' : c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
   const msg = encodeURIComponent(`Olá! Vim pelo site do IBESC e gostaria de receber informações sobre o curso de ${c.name}${isPost ? ` da ${institutionLabel}` : ''}.`);
 
   const audience = c.audience || (isGrad ? `Pessoas que desejam iniciar ou fortalecer uma trajetória profissional na área de ${c.area.toLowerCase()}.` : isTecnico ? `Pessoas que buscam uma formação técnica e prática para ampliar suas oportunidades profissionais em ${c.area.toLowerCase()}.` : `Profissionais e interessados que desejam desenvolver conhecimentos na área de ${c.area.toLowerCase()}.`);
@@ -45,7 +46,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const highlights = c.highlights || (isGrad ? [c.attendanceInfo || 'Consulte o consultor sobre a dinâmica presencial e acadêmica do curso.', 'Formação vinculada à instituição parceira', 'Orientação comercial IBESC'] : isTecnico ? ['Formação técnica', 'Atendimento IBESC', 'Orientação sobre matrícula e próximos passos'] : [isPost ? 'Modalidade digital' : 'Formação profissional', `Oferta pela ${institutionLabel}`, 'Orientação comercial IBESC']);
   const requirements = c.requirements || (isPost ? 'É necessário possuir diploma de graduação para ingressar em uma pós-graduação.' : isGrad ? 'Consulte o consultor IBESC sobre requisitos de ingresso, documentação e condições da turma.' : 'Consulte o IBESC sobre requisitos de ingresso e documentação.');
 
-  const infoItems = isPost ? [['Modalidade', c.modality || 'Digital'], ['Instituição', institutionLabel], ['Duração', c.duration || 'A confirmar na instituição'], ['Área', c.area], ['Local de atendimento', 'IBESC — Boa Viagem/CE']] : [['Modalidade', c.modality || (isGrad ? 'A confirmar pelo consultor' : 'A confirmar pelo IBESC')], ['Duração', c.duration || 'A confirmar pelo consultor'], ['Local', c.local || 'Boa Viagem — CE'], ['Instituição', institution], ...(c.attendanceInfo ? [['Encontros presenciais', c.attendanceInfo]] : []), ['Próxima turma', c.startDate || 'A confirmar pelo consultor']];
+  const infoItems = isPost ? [['Modalidade', c.modality || 'Digital'], ['Instituição', institutionLabel], ['Duração', c.duration || 'A confirmar na instituição'], ['Área', c.area], ['Local de atendimento', 'IBESC — Boa Viagem/CE'], ...(isUnicorpCourse ? [['Início', 'Imediato após a matrícula']] : [])] : [['Modalidade', c.modality || (isGrad ? 'A confirmar pelo consultor' : 'A confirmar pelo IBESC')], ['Duração', c.duration || 'A confirmar pelo consultor'], ['Local', c.local || 'Boa Viagem — CE'], ['Instituição', isUnicorpCourse ? institutionLabel : institution], ...(c.attendanceInfo ? [['Encontros presenciais', c.attendanceInfo]] : []), [isUnicorpCourse ? 'Início' : 'Próxima turma', isUnicorpCourse ? 'Imediato após a matrícula' : c.startDate || 'A confirmar pelo consultor']];
 
   return <main>
     <section className="hero"><div className="container hero-grid"><div>
