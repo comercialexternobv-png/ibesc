@@ -39,6 +39,8 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const isUnicorpCourse = c.id.startsWith('ibesc-unicorp-') || Boolean(c.observations?.some((observation) => /Unicorp(?:Tec)?/i.test(observation)));
   const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.officialUrl : partnerCatalogs.uninassauPos.officialUrl);
   const institutionLabel = isUnicorpCourse ? 'IBESC em parceria com a Unicorp' : c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
+  const themeClass = c.institution === 'UNINASSAU' ? styles.themeUninassau : c.institution === 'UNIFAEL' ? styles.themeUnifael : styles.themeIbesc;
+  const institutionLogo = c.institution === 'UNINASSAU' ? '/images/partners/uninassau.svg' : c.institution === 'UNIFAEL' ? '/images/partners/unifael.svg' : '/images/ibesc-logo-transparent.png';
   const msg = encodeURIComponent(`Olá! Vim pelo site do IBESC e gostaria de receber informações sobre o curso de ${c.name}${isPost ? ` da ${institutionLabel}` : ''}.`);
 
   const audience = c.audience || (isGrad ? `Pessoas que desejam iniciar ou fortalecer uma trajetória profissional na área de ${c.area.toLowerCase()}.` : isTecnico ? `Pessoas que buscam uma formação técnica e prática para ampliar suas oportunidades profissionais em ${c.area.toLowerCase()}.` : `Profissionais e interessados que desejam desenvolver conhecimentos na área de ${c.area.toLowerCase()}.`);
@@ -48,7 +50,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
 
   const infoItems = isPost ? [['Modalidade', c.modality || 'Digital'], ['Instituição', institutionLabel], ['Duração', c.duration || 'A confirmar na instituição'], ['Área', c.area], ['Local de atendimento', 'IBESC — Boa Viagem/CE'], ...(isUnicorpCourse ? [['Início', 'Imediato após a matrícula']] : [])] : [['Modalidade', c.modality || (isGrad ? 'A confirmar pelo consultor' : 'A confirmar pelo IBESC')], ['Duração', c.duration || 'A confirmar pelo consultor'], ['Local', c.local || 'Boa Viagem — CE'], ['Instituição', isUnicorpCourse ? institutionLabel : institution], ...(c.attendanceInfo ? [['Encontros presenciais', c.attendanceInfo]] : []), [isUnicorpCourse ? 'Início' : 'Próxima turma', isUnicorpCourse ? 'Imediato após a matrícula' : c.startDate || 'A confirmar pelo consultor']];
 
-  return <main>
+  return <main className={`${styles.coursePage} ${themeClass}`}>
     <section className="hero"><div className="container hero-grid"><div>
       <span className="eyebrow" style={{ background: 'rgba(255,255,255,.12)', color: '#fff' }}>{isPost ? 'Pós-graduação Digital' : c.type}</span>
       <h1 className="course-hero-title" style={{ maxWidth: 850 }}>{c.name}</h1><p>{institutionLabel} • {c.area}</p>
@@ -57,7 +59,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
         {isPartnerPost && <a className="btn btn-outline" href={`https://wa.me/${wa}?text=${msg}`}>Falar com um consultor <MessageCircle size={17} /></a>}
         {!own && !isPost && <a className="btn btn-outline" href={catalogUrl} target="_blank" rel="noreferrer">Ver catálogo oficial <ExternalLink size={17} /></a>}
       </div>
-    </div><div className="hero-card" style={{overflow:'hidden',padding:0}}><Image src={getCourseImage(c)} alt={`Imagem de ${c.name}`} width={1200} height={800} priority sizes="(max-width: 800px) 100vw, 45vw" style={{width:'100%',height:300,objectFit:'cover',display:'block'}} /><div style={{padding:'18px 20px'}}><strong>{isPost ? `Pós-graduação Digital ${institutionLabel}` : isProfessionalizing ? 'Curso ofertado pelo IBESC' : own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong></div></div></div></section>
+    </div><div className="hero-card" style={{overflow:'hidden',padding:0}}><Image src={getCourseImage(c)} alt={`Imagem de ${c.name}`} width={1200} height={800} priority sizes="(max-width: 800px) 100vw, 45vw" style={{width:'100%',height:300,objectFit:'cover',display:'block'}} /><div className={styles.heroInstitution}><Image src={institutionLogo} alt={institutionLabel} width={300} height={100}/><strong>{isPost ? `Pós-graduação Digital ${institutionLabel}` : isProfessionalizing ? `Curso ofertado pelo ${institutionLabel}` : own ? 'Formação própria IBESC' : `Formação em parceria com ${institution}`}</strong></div></div></div></section>
 
     {c.images && c.images.length > 0 && <section className="section" style={{paddingBottom:0}}><div className="container"><div className="section-head"><span className="eyebrow">Conheça a estrutura</span><h2>Veja o Técnico em Enfermagem de perto</h2><p>Conheça os ambientes e momentos de aprendizagem apresentados pelo IBESC.</p></div><div style={{display:'grid',gridTemplateColumns:'repeat(2,minmax(0,1fr))',gap:18}}>{c.images.map((image, index) => <div key={image} className="card" style={{padding:0,overflow:'hidden',borderRadius:16}}><Image src={image} alt={`${c.name} — imagem ${index + 1}`} width={1200} height={900} sizes="(max-width: 800px) 100vw, 50vw" style={{display:'block',width:'100%',height:280,objectFit:'cover'}} /></div>)}</div></div></section>}
 

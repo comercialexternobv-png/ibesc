@@ -23,3 +23,118 @@
 .courseDetailCard svg {
   color: var(--blue);
 }
+
+.coursePage {
+  --course-primary: #24579b;
+  --course-secondary: #25b85a;
+  --course-accent: #86d79d;
+  --course-surface: #edf6ff;
+  --course-border: #b9d5ee;
+}
+
+.themeIbesc {
+  --course-primary: #24579b;
+  --course-secondary: #20b95a;
+  --course-accent: #73d990;
+  --course-surface: #edf7ff;
+  --course-border: #b8d5ef;
+}
+
+.themeUninassau {
+  --course-primary: #213366;
+  --course-secondary: #c2012e;
+  --course-accent: #f3d332;
+  --course-surface: #fff8dc;
+  --course-border: #e8cf8c;
+}
+
+.themeUnifael {
+  --course-primary: #3a673c;
+  --course-secondary: #587f59;
+  --course-accent: #b0b0b0;
+  --course-surface: #eff7ef;
+  --course-border: #b9d1ba;
+}
+
+.coursePage :global(.hero) {
+  background:
+    radial-gradient(circle at 88% 18%, color-mix(in srgb, var(--course-accent) 38%, transparent) 0, transparent 28%),
+    linear-gradient(120deg, var(--course-primary), color-mix(in srgb, var(--course-primary) 72%, var(--course-secondary)));
+}
+
+.coursePage :global(.hero-card) {
+  border: 1px solid color-mix(in srgb, var(--course-accent) 65%, white);
+  box-shadow: 0 28px 70px color-mix(in srgb, var(--course-primary) 38%, transparent);
+}
+
+.heroInstitution {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 20px;
+  background: #fff;
+  color: var(--course-primary);
+}
+
+.heroInstitution img {
+  width: 100%;
+  height: 54px;
+  object-fit: contain;
+}
+
+.coursePage :global(.eyebrow) {
+  background: var(--course-surface);
+  color: var(--course-primary);
+}
+
+.coursePage :global(.btn-primary),
+.coursePage :global(.btn-dark) {
+  background: var(--course-primary);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--course-primary) 28%, transparent);
+}
+
+.coursePage :global(.btn-primary):hover,
+.coursePage :global(.btn-dark):hover {
+  background: var(--course-secondary);
+}
+
+.coursePage :global(.card) {
+  border-color: var(--course-border);
+}
+
+.coursePage :global(.card) h3,
+.coursePage :global(.section) h2,
+.coursePage :global(.card) strong {
+  color: var(--course-primary);
+}
+
+.coursePage .courseDetailCard {
+  border-left: 5px solid var(--course-secondary);
+  background: linear-gradient(135deg, #fff 68%, var(--course-surface));
+}
+
+.coursePage .courseDetailCard svg {
+  color: var(--course-secondary);
+}
+
+.coursePage :global(.cta) {
+  border: 1px solid var(--course-border);
+  background: linear-gradient(120deg, var(--course-surface), #fff);
+  box-shadow: inset 6px 0 0 var(--course-secondary);
+}
+
+.coursePage :global(.link) {
+  color: var(--course-primary);
+}
+
+@media (max-width: 600px) {
+  .heroInstitution {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .heroInstitution img {
+    height: 48px;
+  }
+}
