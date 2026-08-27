@@ -36,7 +36,7 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   const isGrad = c.category === 'GRADUACAO';
   const isTecnico = c.category === 'TECNICO';
   const isProfessionalizing = c.category === 'PROFISSIONALIZANTE';
-  const isUnicorpCourse = c.id.startsWith('ibesc-unicorp-');
+  const isUnicorpCourse = c.id.startsWith('ibesc-unicorp-') || Boolean(c.observations?.some((observation) => /Unicorp(?:Tec)?/i.test(observation)));
   const catalogUrl = c.externalUrl || (c.institution === 'UNIFAEL' ? partnerCatalogs.unifaelPos.officialUrl : partnerCatalogs.uninassauPos.officialUrl);
   const institutionLabel = isUnicorpCourse ? 'IBESC em parceria com a Unicorp' : c.institution === 'UNIFAEL' ? 'UNIFAEL' : c.institution === 'UNINASSAU' ? 'UNINASSAU' : institution;
   const msg = encodeURIComponent(`Olá! Vim pelo site do IBESC e gostaria de receber informações sobre o curso de ${c.name}${isPost ? ` da ${institutionLabel}` : ''}.`);
