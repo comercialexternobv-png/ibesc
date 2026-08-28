@@ -138,3 +138,6 @@
     height: 48px;
   }
 }
+
+.factCard{margin-top:25px;overflow:hidden;border:1px solid var(--course-border);border-radius:22px;background:#fff;box-shadow:0 12px 34px color-mix(in srgb,var(--course-primary) 10%,transparent)}.factCard h3{margin:0;padding:22px 24px;border-bottom:1px solid var(--course-border);background:var(--course-surface);color:var(--course-primary)}.factCard dl{margin:0;padding:8px 24px}.factCard dl>div{display:grid;grid-template-columns:minmax(150px,.7fr) minmax(0,1.6fr);gap:22px;padding:15px 0;border-bottom:1px solid color-mix(in srgb,var(--course-border) 65%,white)}.factCard dl>div:last-child{border-bottom:0}.factCard dt{color:var(--course-primary);font-weight:800}.factCard dd{margin:0;color:var(--muted);line-height:1.55}.responsibilityCard{min-height:220px;border-top:5px solid var(--course-secondary);background:linear-gradient(145deg,#fff,var(--course-surface))}.responsibilityCard svg{color:var(--course-secondary)}
+@media(max-width:600px){.factCard dl>div{grid-template-columns:1fr;gap:5px}}
