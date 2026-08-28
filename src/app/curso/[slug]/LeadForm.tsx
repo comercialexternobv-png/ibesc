@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useState } from 'react';
 import { MessageCircle, Send } from 'lucide-react';
+import Link from 'next/link';
 
 const wa = '5588988498031';
 
@@ -79,7 +80,7 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-honeypot" aria-hidden="true"><label htmlFor={`course-website-${courseName}`}>Não preencha este campo</label><input id={`course-website-${courseName}`} name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} /></div>
-      <p>Deixe seus dados e fale com nossa equipe sobre o próximo passo.</p>
+      <p>Receba orientação sobre modalidade, disponibilidade e processo de matrícula.</p>
 
       <label>
         Nome
@@ -92,9 +93,11 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
       </label>
 
       <label>
-        E-mail
+        E-mail <small>(opcional)</small>
         <input name="email" type="email" autoComplete="email" maxLength={254} className="input" value={email} onChange={(event) => setEmail(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
       </label>
+
+      <p className="form-privacy">Ao enviar, você autoriza o IBESC a usar seus dados para responder a esta solicitação. Consulte a <Link href="/politica-de-privacidade">Política de Privacidade</Link>.</p>
 
       {error && <p role="alert" style={{ margin: '4px 0 14px', color: '#b42318' }}>{error}</p>}
 

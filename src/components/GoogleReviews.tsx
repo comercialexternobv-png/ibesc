@@ -13,11 +13,11 @@ function Stars() {
 
 export default function GoogleReviews() {
   return <section className="section review-section" id="avaliacoes"><div className="container">
-    <div className="review-heading"><div><span className="eyebrow">Avaliações no Google</span><h2>Conheça a experiência de quem já passou pelo IBESC.</h2><p>Seleção de avaliações públicas já publicadas no perfil da unidade no Google.</p></div>
+    <div className="review-heading"><div><span className="eyebrow">Avaliações públicas</span><h2>Experiências compartilhadas sobre a unidade parceira em Boa Viagem.</h2><p>Os comentários abaixo pertencem ao perfil público “Uninassau | Boa Viagem — CE” no Google e não constituem avaliações institucionais do IBESC.</p></div>
       <a className="google-rating-summary" href={siteInfo.googleMapsUrl} target="_blank" rel="noopener noreferrer" data-conversion="google-avaliacoes"><strong>5,0</strong><span><Stars/><small>16 avaliações no Google</small></span><ExternalLink size={18}/></a>
     </div>
     <div className="google-reviews-grid">{publicReviews.map(review => <article className="google-review-card" key={review.author}><Stars/><p>“{review.text}”</p><footer><strong>{review.author}</strong><span>Avaliação pública no Google</span></footer></article>)}</div>
-    <div className="google-reviews-footer"><span>Avaliações consultadas no perfil público “Uninassau | Boa Viagem — CE”.</span><a className="btn btn-dark" href={siteInfo.googleMapsUrl} target="_blank" rel="noopener noreferrer" data-conversion="google-avaliacoes">Ver todas no Google <ArrowRight size={16}/></a></div>
+    <div className="google-reviews-footer"><span>Fonte: perfil público “Uninassau | Boa Viagem — CE”. Nota e quantidade podem mudar após a publicação.</span><a className="btn btn-dark" href={siteInfo.googleMapsUrl} target="_blank" rel="noopener noreferrer" data-conversion="google-avaliacoes">Ver a fonte no Google <ArrowRight size={16}/></a></div>
     <p className="google-attribution">Google e o logotipo do Google são marcas registradas da Google LLC.</p>
   </div></section>;
 }

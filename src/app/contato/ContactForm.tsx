@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useState } from 'react';
 import { MessageCircle, Send } from 'lucide-react';
+import Link from 'next/link';
 
 const whatsappUrl = 'https://wa.me/5588988498031?text=' + encodeURIComponent('Olá! Vim pelo site do IBESC e gostaria de receber informações sobre os cursos.');
 
@@ -63,10 +64,11 @@ export default function ContactForm() {
       <div className="form-honeypot" aria-hidden="true"><label htmlFor="contact-website">Não preencha este campo</label><input id="contact-website" name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} /></div>
       <label htmlFor="contact-name" className="sr-only">Nome</label><input id="contact-name" required name="nome" autoComplete="name" maxLength={120} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="Nome" value={nome} onChange={(event) => setNome(event.target.value)} />
       <label htmlFor="contact-whatsapp" className="sr-only">WhatsApp</label><input id="contact-whatsapp" required name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" maxLength={24} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="WhatsApp" value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} />
-      <label htmlFor="contact-email" className="sr-only">E-mail</label><input id="contact-email" name="email" type="email" autoComplete="email" maxLength={254} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="E-mail" value={email} onChange={(event) => setEmail(event.target.value)} />
+      <label htmlFor="contact-email" className="sr-only">E-mail opcional</label><input id="contact-email" name="email" type="email" autoComplete="email" maxLength={254} className="input" style={{ width: '100%', margin: '8px 0' }} placeholder="E-mail (opcional)" value={email} onChange={(event) => setEmail(event.target.value)} />
       <label htmlFor="contact-message" className="sr-only">Mensagem</label><textarea id="contact-message" name="mensagem" maxLength={2000} className="input" style={{ width: '100%', minHeight: 112, margin: '8px 0', paddingTop: 14, resize: 'vertical' }} placeholder="Mensagem" value={mensagem} onChange={(event) => setMensagem(event.target.value)} />
 
-      {success && <p role="status" aria-live="polite" style={{ margin: '8px 0', color: 'var(--blue)' }}>Contato enviado com sucesso. Em breve nossa equipe falará com você.</p>}
+      <p className="form-privacy">Ao enviar, você autoriza o IBESC a usar seus dados para responder a esta solicitação. Consulte a <Link href="/politica-de-privacidade">Política de Privacidade</Link>.</p>
+      {success && <p role="status" aria-live="polite" style={{ margin: '8px 0', color: 'var(--blue)' }}>Solicitação recebida. A equipe utilizará os dados informados para responder ao seu contato.</p>}
       {error && <p role="alert" aria-live="assertive" style={{ margin: '8px 0', color: '#b42318' }}>Não foi possível enviar sua mensagem. Tente novamente.</p>}
 
       <button type="submit" className="btn btn-primary" style={{ width: '100%', marginTop: 10 }} disabled={loading}>

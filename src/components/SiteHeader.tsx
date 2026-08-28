@@ -4,19 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { siteInfo } from '@/data/site';
 
 const courseNavigation = [
   { href: '/cursos?category=GRADUACAO', label: 'Graduação' },
   { href: '/cursos?category=POS_GRADUACAO', label: 'Pós-graduação' },
   { href: '/cursos-tecnicos', label: 'Cursos Técnicos' },
-  { href: '/cursos?category=PROFISSIONALIZANTE', label: 'Profissionalizantes' },
+  { href: '/cursos-profissionalizantes', label: 'Profissionalizantes e básicos' },
   { href: '/cursos', label: 'Todos os Cursos' },
-];
-
-const navigation = [
-  { href: '/', label: 'Home' },
-  { href: '/sobre', label: 'Sobre' },
-  { href: '/contato', label: 'Contato' },
 ];
 
 export default function SiteHeader() {
@@ -59,7 +54,9 @@ export default function SiteHeader() {
             </div>
           </div>
           <Link href="/sobre">Sobre</Link>
+          <Link href="/estrutura">Estrutura</Link>
           <Link href="/contato">Contato</Link>
+          <a className="nav-cta" href={`https://wa.me/${siteInfo.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site do IBESC e gostaria de receber orientação sobre os cursos.')}`}>Fale com a equipe</a>
         </nav>
 
         <button
@@ -82,7 +79,9 @@ export default function SiteHeader() {
         <div id="mobile-courses-menu" className={`mobile-courses-list${isCoursesOpen ? ' is-open' : ''}`}>
           {courseNavigation.map((item) => <Link key={item.href} href={item.href} onClick={closeMenu}>{item.label}</Link>)}
         </div>
-        {navigation.slice(1).map((item) => <Link key={item.href} href={item.href} onClick={closeMenu}>{item.label}</Link>)}
+        <Link href="/sobre" onClick={closeMenu}>Sobre</Link>
+        <Link href="/estrutura" onClick={closeMenu}>Estrutura</Link>
+        <Link href="/contato" onClick={closeMenu}>Contato</Link>
       </nav>
     </header>
   );
