@@ -105,12 +105,38 @@ const professionalizingCatalog: ProfessionalizingCourse[] = [
   ['Química', 55, 'Educação'],
 ];
 
+const driveCatalogDetails: Record<string, Pick<Course, 'description' | 'learning'>> = {
+  'Cuidador de Idoso': { description: 'Formação para desenvolver conhecimentos sobre atenção, segurança, rotina e cuidados com a pessoa idosa.', learning: ['Processo de envelhecimento e alterações fisiológicas', 'Independência, autocuidado e atividades da vida diária', 'Higiene, alimentação, hidratação e cuidados com a pele', 'Prevenção de quedas, acidentes e úlceras de pressão', 'Direitos da pessoa idosa e relacionamento interpessoal'] },
+  'Auxiliar Financeiro': { description: 'Formação em rotinas financeiras, organização empresarial e fundamentos para apoio ao controle de recursos.', learning: ['Administração financeira e contábil', 'Matemática financeira', 'Organização empresarial', 'Práticas financeiras', 'Introdução à educação a distância'] },
+  'Auxiliar de Recursos Humanos': { description: 'Formação voltada às rotinas de recursos humanos, recrutamento, cargos, salários e organização empresarial.', learning: ['Gestão de recursos humanos', 'Recrutamento, seleção e socialização', 'Cargos, carreiras e salários', 'Organização empresarial', 'Introdução à educação a distância'] },
+  'Auxiliar Administrativo': { description: 'Formação para apoiar rotinas administrativas, materiais, compras, finanças e organização empresarial.', learning: ['Administração de materiais', 'Administração financeira e contábil', 'Gestão de compras e negociação', 'Organização empresarial', 'Introdução à educação a distância'] },
+  'Auxiliar de Enfermagem': { description: 'Formação profissionalizante online com conteúdos introdutórios relacionados ao apoio em enfermagem e atenção básica.', learning: ['Anatomia e fisiologia humana', 'Bioética e biossegurança', 'Atenção primária e Estratégia Saúde da Família', 'Patologia e parasitologia geral', 'Práticas de enfermagem e organização da atenção básica'] },
+  'Agente de Vigilância em Saúde': { description: 'Formação em vigilância sanitária, epidemiológica e ambiental, com conteúdos relacionados à prevenção e ao controle em saúde.', learning: ['Vigilância sanitária, epidemiológica e ambiental', 'Higiene e vigilância sanitária', 'Controle e prevenção de infecção hospitalar', 'Citopatologia', 'Introdução à educação a distância'] },
+  'Auxiliar de Farmácia em Manipulação': { description: 'Formação com fundamentos de farmácia, biossegurança, farmacologia e fitoterapia aplicada.', learning: ['Bioética e biossegurança', 'Farmácia clínica e atenção farmacêutica', 'Fisiologia e farmacologia', 'Fitoterapia aplicada', 'Introdução à educação a distância'] },
+  'Supervisão e Orientação Escolar': { description: 'Formação para ampliar conhecimentos sobre supervisão, orientação, aprendizagem e desenvolvimento no contexto escolar.', learning: ['Supervisão e orientação escolar', 'Avaliação: teoria e prática', 'Psicologia da aprendizagem', 'Psicologia do desenvolvimento'] },
+  'LIBRAS - Língua Brasileira de Sinais': { description: 'Formação em Língua Brasileira de Sinais, com conteúdos de comunicação, cultura surda, gramática e vocabulário.', learning: ['Introdução, alfabeto e numerais em Libras', 'Cultura e história da comunidade surda', 'Estrutura gramatical e expressão facial', 'Vocabulário para situações cotidianas', 'Comunicação em contextos de educação, saúde e trabalho'] },
+  'Gestão e Orientação Escolar': { description: 'Formação em gestão educacional, legislação, supervisão e orientação no ambiente escolar.', learning: ['Gestão educacional', 'Organização e legislação da educação', 'Supervisão e orientação escolar'] },
+  'Psicomotricidade': { description: 'Formação sobre desenvolvimento neuropsicomotor, aprendizagem, psicologia do desenvolvimento e psicomotricidade.', learning: ['Atuação interdisciplinar e neuroeducação', 'Desenvolvimento neuropsicomotor e aprendizagem', 'Psicologia do desenvolvimento', 'Psicomotricidade'] },
+  'Metodologias Ativas e Tecnologias Educacionais': { description: 'Formação para compreender modalidades de ensino, tecnologias educacionais e metodologias ativas de aprendizagem.', learning: ['Educação a distância e novas modalidades de ensino', 'Educação e tecnologias', 'Metodologias ativas', 'Neuroeducação e tecnologias educacionais'] },
+  'Psicomotricidade e Educação Especial': { description: 'Formação que relaciona psicomotricidade, desenvolvimento, aprendizagem e educação especial.', learning: ['Desenvolvimento neuropsicomotor e aprendizagem', 'Psicomotricidade', 'Transtornos e distúrbios da aprendizagem', 'Transtornos psiquiátricos na infância e adolescência'] },
+  'Transtornos e Problemas na Aprendizagem': { description: 'Formação sobre desenvolvimento, aquisição da linguagem e condições que podem interferir na aprendizagem.', learning: ['Desenvolvimento neuropsicomotor e aprendizagem', 'Aquisição da linguagem e da escrita', 'Transtornos e distúrbios da aprendizagem', 'Transtornos psiquiátricos na infância e adolescência'] },
+  'Educação Inclusiva': { description: 'Formação em práticas e conhecimentos relacionados à inclusão, acessibilidade e diversidade no ambiente educacional.', learning: ['Educação inclusiva', 'Sistema Braille', 'Transtorno do Espectro Autista', 'Transtornos e distúrbios da aprendizagem'] },
+  'Educação Inclusiva e Diversidade': { description: 'Formação que aborda inclusão, diversidade, relações étnico-raciais e políticas públicas de educação.', learning: ['Educação das relações étnico-raciais', 'Políticas públicas e educação', 'Transtornos e distúrbios da aprendizagem', 'Transtornos psiquiátricos na infância e adolescência'] },
+  'Alfabetização e Letramento': { description: 'Formação sobre leitura, escrita, educação infantil e processos de aquisição da linguagem.', learning: ['Alfabetização e letramento', 'Educação infantil', 'Aquisição da linguagem e da escrita', 'Transtornos e distúrbios da aprendizagem'] },
+  'Psicopedagogia Escolar': { description: 'Formação sobre aprendizagem, cognição, didática e fundamentos da psicopedagogia no contexto escolar.', learning: ['Didática', 'Processos cognitivos e aprendizagem', 'Psicologia da aprendizagem', 'Psicopedagogia'] },
+  'Neuroeducação': { description: 'Formação que integra neurociência, desenvolvimento, aprendizagem, práticas pedagógicas e psicomotricidade.', learning: ['Atuação interdisciplinar e neuroeducação', 'Desenvolvimento neuropsicomotor e aprendizagem', 'Jogos, brincadeiras e didática aplicada', 'Psicomotricidade'] },
+  'Educação Infantil': { description: 'Formação voltada aos fundamentos da educação infantil e aos processos iniciais de aprendizagem.', learning: ['Alfabetização e letramento', 'Educação infantil', 'Processos cognitivos e aprendizagem'] },
+  'Programação': { description: 'Formação em fundamentos de desenvolvimento web, lógica, banco de dados e programação PHP.', learning: ['Ambiente para desenvolvimento web', 'Introdução a banco de dados', 'Lógica de programação', 'Programação web com PHP', 'Tecnologias e linguagens de banco de dados'] },
+};
+
 function slugifyCourseName(name: string) {
   return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-export const professionalizingCourses: Course[] = professionalizingCatalog.map(([name, durationHours, area], index) => ({
+export const professionalizingCourses: Course[] = professionalizingCatalog.map(([name, durationHours, area], index) => {
+  const verifiedDetails = driveCatalogDetails[name];
+  return ({
   id: `ibesc-prof-${String(index + 1).padStart(3, '0')}`,
   name,
   slug: `profissionalizante-${slugifyCourseName(name)}`,
@@ -120,12 +146,13 @@ export const professionalizingCourses: Course[] = professionalizingCatalog.map((
   area,
   modality: 'EAD',
   duration: `${durationHours}h`,
-  description: `Curso profissionalizante EAD de ${name}, ofertado pelo IBESC para qualificação e desenvolvimento de competências profissionais.`,
+  description: verifiedDetails?.description || `Curso profissionalizante EAD de ${name}, ofertado pelo IBESC para qualificação e desenvolvimento de competências profissionais.`,
   status: 'ATIVO',
   local: 'Atendimento on-line pelo IBESC',
   audience: 'Pessoas que desejam desenvolver novas habilidades, atualizar conhecimentos ou ampliar oportunidades profissionais.',
-  learning: [`Fundamentos relacionados a ${name}.`, 'Conhecimentos aplicáveis à rotina profissional.', 'Desenvolvimento de habilidades para qualificação e atualização.'],
-  highlights: ['Curso EAD', `Carga horária de ${durationHours}h`, 'Orientação e atendimento pelo IBESC'],
+  learning: verifiedDetails?.learning || [`Fundamentos relacionados a ${name}.`, 'Conhecimentos aplicáveis à rotina profissional.', 'Desenvolvimento de habilidades para qualificação e atualização.'],
+  highlights: ['Curso 100% online', `Carga horária de ${durationHours}h`, 'Suporte acadêmico pela equipe IBESC', 'Estudo no próprio ritmo durante o período de acesso'],
   requirements: 'Consulte o IBESC sobre requisitos de ingresso, acesso ao curso e condições atuais de matrícula.',
-  observations: ['Curso certificado pela UnicorpTec.'],
-}));
+  observations: ['Curso ofertado pelo IBESC em parceria com a Unicorp, responsável pela certificação.', 'Carga horária estimada conforme o material de referência da formação.'],
+  });
+});
