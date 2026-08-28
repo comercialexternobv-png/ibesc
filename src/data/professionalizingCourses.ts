@@ -129,6 +129,30 @@ const driveCatalogDetails: Record<string, Pick<Course, 'description' | 'learning
   'Programação': { description: 'Formação em fundamentos de desenvolvimento web, lógica, banco de dados e programação PHP.', learning: ['Ambiente para desenvolvimento web', 'Introdução a banco de dados', 'Lógica de programação', 'Programação web com PHP', 'Tecnologias e linguagens de banco de dados'] },
 };
 
+const driveCatalogImages: Record<string, string> = {
+  'Cuidador de Idoso': '/images/profissionalizantes/cuidador-idoso.webp',
+  'Auxiliar Financeiro': '/images/profissionalizantes/auxiliar-financeiro.webp',
+  'Auxiliar de Recursos Humanos': '/images/profissionalizantes/auxiliar-rh.webp',
+  'Auxiliar Administrativo': '/images/profissionalizantes/auxiliar-administrativo.webp',
+  'Auxiliar de Enfermagem': '/images/profissionalizantes/auxiliar-enfermagem.webp',
+  'Agente de Vigilância em Saúde': '/images/profissionalizantes/agente-vigilancia.webp',
+  'Auxiliar de Farmácia em Manipulação': '/images/profissionalizantes/auxiliar-farmacia-manipulacao.webp',
+  'Supervisão e Orientação Escolar': '/images/profissionalizantes/supervisao-orientacao.webp',
+  'LIBRAS - Língua Brasileira de Sinais': '/images/profissionalizantes/libras.webp',
+  'Gestão e Orientação Escolar': '/images/profissionalizantes/gestao-orientacao.webp',
+  'Psicomotricidade': '/images/profissionalizantes/psicomotricidade.webp',
+  'Metodologias Ativas e Tecnologias Educacionais': '/images/profissionalizantes/metodologias-ativas.webp',
+  'Psicomotricidade e Educação Especial': '/images/profissionalizantes/psicomotricidade-educacao-especial.webp',
+  'Transtornos e Problemas na Aprendizagem': '/images/profissionalizantes/transtornos-aprendizagem.webp',
+  'Educação Inclusiva': '/images/profissionalizantes/educacao-inclusiva.webp',
+  'Educação Inclusiva e Diversidade': '/images/profissionalizantes/educacao-inclusiva-diversidade.webp',
+  'Alfabetização e Letramento': '/images/profissionalizantes/alfabetizacao-letramento.webp',
+  'Psicopedagogia Escolar': '/images/profissionalizantes/psicopedagogia-escolar.webp',
+  'Neuroeducação': '/images/profissionalizantes/neuroeducacao.webp',
+  'Educação Infantil': '/images/profissionalizantes/educacao-infantil.webp',
+  'Programação': '/images/profissionalizantes/programacao.webp',
+};
+
 function slugifyCourseName(name: string) {
   return name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
     .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -147,6 +171,7 @@ export const professionalizingCourses: Course[] = professionalizingCatalog.map((
   modality: 'EAD',
   duration: `${durationHours}h`,
   description: verifiedDetails?.description || `Curso profissionalizante EAD de ${name}, ofertado pelo IBESC para qualificação e desenvolvimento de competências profissionais.`,
+  image: driveCatalogImages[name],
   status: 'ATIVO',
   local: 'Atendimento on-line pelo IBESC',
   audience: 'Pessoas que desejam desenvolver novas habilidades, atualizar conhecimentos ou ampliar oportunidades profissionais.',
