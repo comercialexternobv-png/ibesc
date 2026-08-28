@@ -5,6 +5,12 @@ import { MessageCircle, Send } from 'lucide-react';
 import Link from 'next/link';
 
 const wa = '5588988498031';
+function formatPhone(value: string) {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 7) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, digits.length - 4)}-${digits.slice(-4)}`;
+}
 
 type LeadFormProps = {
   courseName: string;
@@ -89,7 +95,7 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
 
       <label>
         WhatsApp
-        <input required name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" maxLength={24} className="input" value={whatsapp} onChange={(event) => setWhatsapp(event.target.value)} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
+        <input required name="whatsapp" type="tel" inputMode="numeric" autoComplete="tel" maxLength={16} className="input" placeholder="(DDD) número" value={whatsapp} onChange={(event) => setWhatsapp(formatPhone(event.target.value))} style={{ width: '100%', margin: '7px 0 14px', border: '1px solid var(--border)' }} />
       </label>
 
       <label>

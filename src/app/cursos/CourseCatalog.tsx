@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Suspense, useEffect, useMemo, useState } from 'react';
-import { Search, SlidersHorizontal, Clock3, Monitor, Building2 } from 'lucide-react';
+import { Search, SlidersHorizontal, Clock3, Monitor, Building2, X, Info } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { categoryLabels, courses, getCourseImage, getCourseInstitution, type CourseCategory } from '@/data/courses';
 
@@ -91,6 +91,16 @@ function CourseCatalogContent() {
   }
 
   function clearFilters() { router.push(pathname, { scroll: false }); }
+  const activeFilters = [
+    filters.query.trim() && { key: 'query', label: `Busca: ${filters.query.trim()}` },
+    filters.area !== allOption && { key: 'area', label: filters.area },
+    filters.category !== allOption && { key: 'category', label: categoryLabels[filters.category] },
+    filters.institution !== allOption && { key: 'institution', label: filters.institution },
+    filters.modality !== allOption && { key: 'modality', label: filters.modality },
+  ].filter(Boolean) as { key: keyof Filters; label: string }[];
+  function removeFilter(key: keyof Filters) {
+    updateFilters({ [key]: key === 'query' ? '' : allOption } as Partial<Filters>);
+  }
   function getTypeLabel(course: typeof courses[number]) { return course.category === 'POS_GRADUACAO' ? 'Pós-graduação Digital' : course.type; }
   function institutionTheme(value: string) { return value.includes('UNINASSAU') ? 'theme-uninassau' : value.includes('UNIFAEL') ? 'theme-unifael' : 'theme-ibesc'; }
 
@@ -103,13 +113,21 @@ function CourseCatalogContent() {
       <select aria-label="Filtrar por modalidade" className="input" value={filters.modality} onChange={(e) => updateFilters({ modality: e.target.value as Filters['modality'] })}><option value={allOption}>Todas as modalidades</option>{modalities.map(modality => <option key={modality} value={modality}>{modality}</option>)}</select>
     </div></div>
 
+    <div className="catalog-legend" aria-label="Como identificar as ofertas">
+      <div><strong>IBESC</strong><span>Cursos próprios e atendimento do instituto.</span></div>
+      <div><strong>UNINASSAU / UNIFAEL</strong><span>Formação acadêmica da instituição indicada, com orientação comercial do IBESC.</span></div>
+      <div><Info size={18}/><span>Modalidade, disponibilidade e condições devem ser confirmadas na página do curso ou na fonte oficial correspondente.</span></div>
+    </div>
+
+    {activeFilters.length > 0 && <div className="active-filters"><strong>Filtros ativos:</strong>{activeFilters.map((filter)=><button type="button" key={filter.key} onClick={()=>removeFilter(filter.key)}>{filter.label}<X size={14}/><span className="sr-only">Remover filtro</span></button>)}<button type="button" className="clear-all" onClick={clearFilters}>Limpar todos</button></div>}
+
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:15,margin:'28px 0 18px',flexWrap:'wrap'}}>
       <strong>{filtered.length} formação{filtered.length === 1 ? '' : 'ões'} encontrada{filtered.length === 1 ? '' : 's'}</strong>
       <span style={{color:'var(--muted)',fontSize:14}}><SlidersHorizontal size={15} style={{verticalAlign:'middle',marginRight:5}}/>Filtros aplicados em tempo real</span>
     </div>
 
     {filtered.length ? <><div className="course-grid">{visibleCourses.map(course => {
-      const institution = getCourseInstitution(course); const isPost = course.category === 'POS_GRADUACAO'; const isGrad = course.category === 'GRADUACAO';
+      const institution = getCourseInstitution(course);
       return <article className={`card course-card catalog-course-card ${institutionTheme(institution)}`} key={course.id}>
         <div className="course-image" style={{backgroundImage:`url(${getCourseImage(course)})`,backgroundSize:'cover',backgroundPosition:'center'}} aria-hidden="true" />
         <span className="tag">{getTypeLabel(course)}</span><h3>{course.name}</h3>
@@ -118,8 +136,7 @@ function CourseCatalogContent() {
           {course.modality && <div style={{display:'flex',alignItems:'center',gap:7}}><Monitor size={15}/><span><strong style={{color:'var(--text)'}}>Modalidade:</strong> {course.modality}</span></div>}
           {course.duration && <div style={{display:'flex',alignItems:'center',gap:7}}><Clock3 size={15}/><span><strong style={{color:'var(--text)'}}>Duração:</strong> {course.duration}</span></div>}
         </div>
-        {isPost && <div className="course-card-note">{course.institution === 'IBESC' ? 'Informações acadêmicas, disponibilidade e condições atuais devem ser confirmadas com o IBESC.' : 'Informações acadêmicas e condições atuais devem ser confirmadas na página oficial da instituição.'}</div>}
-        <Link className="btn btn-dark" href={`/curso/${course.slug}`}>{isPost ? 'Ver detalhes da pós' : isGrad ? 'Ver detalhes da graduação' : course.institution === 'IBESC' ? 'Saiba mais' : 'Ver formação'}</Link>
+        <Link className="btn btn-dark" href={`/curso/${course.slug}`}>Conhecer o curso</Link>
       </article>;
     })}</div>{visibleCount < filtered.length && <div className="catalog-load-more"><button className="btn btn-dark" onClick={() => setVisibleCount(count => count + pageSize)}>Carregar mais cursos</button><span>Exibindo {visibleCourses.length} de {filtered.length}</span></div>}</> : <div className="card" style={{textAlign:'center',padding:'55px 25px'}}><Search size={34} color="var(--blue)"/><h3>Nenhuma formação encontrada</h3><p>Tente alterar os filtros ou buscar por outro termo.</p><button className="btn btn-dark" onClick={clearFilters}>Limpar filtros</button></div>}
   </>;
