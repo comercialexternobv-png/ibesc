@@ -33,7 +33,7 @@ export default function SiteFooter() {
           <p>Parceiros: UNINASSAU e UNIFAEL</p>
         </div>
       </div>
-      <div className="container footer-bottom">© {new Date().getFullYear()} IBESC. Todos os direitos reservados. As informações acadêmicas dos cursos parceiros devem ser confirmadas nos canais oficiais das instituições responsáveis.</div>
+      <div className="container footer-bottom">© {new Date().getFullYear()} IBESC. Todos os direitos reservados. O suporte acadêmico é realizado pela equipe IBESC. Oferta, regras acadêmicas e certificação dos cursos parceiros permanecem sob responsabilidade da instituição indicada.</div>
     </footer>
   );
 }

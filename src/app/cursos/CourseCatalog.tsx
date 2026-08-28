@@ -115,7 +115,7 @@ function CourseCatalogContent() {
 
     <div className="catalog-legend" aria-label="Como identificar as ofertas">
       <div><strong>IBESC</strong><span>Cursos próprios e atendimento do instituto.</span></div>
-      <div><strong>UNINASSAU / UNIFAEL</strong><span>Formação acadêmica da instituição indicada, com orientação comercial do IBESC.</span></div>
+      <div><strong>UNINASSAU / UNIFAEL</strong><span>Formação da instituição indicada, com suporte acadêmico da equipe IBESC.</span></div>
       <div><Info size={18}/><span>Modalidade, disponibilidade e condições devem ser confirmadas na página do curso ou na fonte oficial correspondente.</span></div>
     </div>
 
