@@ -4,6 +4,7 @@ export const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || (deploymentHost ? `h
 export const siteInfo = {
   name: 'IBESC — Instituto Brasileiro de Educação, Saúde e Cultura',
   shortName: 'IBESC',
+  cnpj: '29.038.844/0001-03',
   phone: '+55 88 98849-8031',
   whatsapp: '5588988498031',
   streetAddress: 'Rua Deputado David Capistrano, 802',

@@ -30,6 +30,7 @@ export default function SiteFooter() {
           <h4>Atendimento</h4>
           <p>{siteInfo.streetAddress}<br />{siteInfo.neighborhood}<br />{siteInfo.city} — {siteInfo.state}</p>
           <a href={`tel:${siteInfo.phone.replace(/\s/g, '')}`}>{siteInfo.phone}</a>
+          <p>CNPJ: {siteInfo.cnpj}</p>
           <p>Parceiros: UNINASSAU e UNIFAEL</p>
         </div>
       </div>
