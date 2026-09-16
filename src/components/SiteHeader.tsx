@@ -56,7 +56,7 @@ export default function SiteHeader() {
           <Link href="/sobre">Sobre</Link>
           <Link href="/estrutura">Estrutura</Link>
           <Link href="/contato">Contato</Link>
-          <a className="nav-cta" href={`https://wa.me/${siteInfo.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site do IBESC e gostaria de receber orientação sobre os cursos.')}`}>Fale com a equipe</a>
+          <a className="nav-cta" href={`https://wa.me/${siteInfo.whatsapp}?text=${encodeURIComponent('Olá! Vim pelo site do IBESC e gostaria de receber informações sobre os cursos.')}`}>Fale com a equipe</a>
         </nav>
 
         <button

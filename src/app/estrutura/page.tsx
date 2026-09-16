@@ -5,7 +5,7 @@ import { siteInfo } from '@/data/site';
 
 export const metadata = { title: 'Estrutura | IBESC', description: 'Conheça ambientes reais da estrutura do IBESC em Boa Viagem — CE.' };
 const spaces = [
-  { title: 'Fachada e atendimento', description: 'Ponto de atendimento do IBESC em Boa Viagem, onde a equipe recebe interessados e orienta sobre as opções disponíveis.', image: '/images/local-ibesc-boa-viagem.webp' },
+  { title: 'Fachada e atendimento', description: 'Ponto de atendimento do IBESC em Boa Viagem, onde a equipe recebe interessados e apresenta informações sobre as opções disponíveis.', image: '/images/local-ibesc-boa-viagem.webp' },
   { title: 'Ambiente de aprendizagem', description: 'Espaço utilizado em atividades relacionadas às formações próprias correspondentes.', image: '/images/tecnico-enfermagem-2.webp' },
   { title: 'Laboratório do Técnico em Enfermagem', description: 'Estrutura de apoio às experiências práticas específicas do curso Técnico em Enfermagem.', image: '/images/tecnico-enfermagem-3.webp' },
   { title: 'Atividade prática de Enfermagem', description: 'Registro de momento de aprendizagem vinculado à formação técnica em Enfermagem.', image: '/images/tecnico-enfermagem-4.webp' },

@@ -86,7 +86,7 @@ export default function LeadForm({ courseName, tipoFormacao, tipoComercial, inst
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-honeypot" aria-hidden="true"><label htmlFor={`course-website-${courseName}`}>Não preencha este campo</label><input id={`course-website-${courseName}`} name="website" tabIndex={-1} autoComplete="off" value={website} onChange={(event) => setWebsite(event.target.value)} /></div>
-      <p>Receba orientação sobre modalidade, disponibilidade e processo de matrícula.</p>
+      <p>Receba informações sobre modalidade, disponibilidade e processo de matrícula.</p>
 
       <label>
         Nome
